@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mesas de Exámenes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, sans-serif; color: #203044; background: #f4f6f9; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { background: #163b59; color: white; padding: 22px 20px; }
+    .contenedor { max-width: 1080px; margin: auto; }
+    .marca { display: flex; align-items: center; gap: 24px; }
+    .identidad { display: flex; align-items: center; gap: 14px; flex: 0 1 auto; min-width: 0; }
+    .logo { display: block; width: 64px; height: auto; object-fit: contain; }
+    .nombre-instituto { font-family: 'Cinzel', Georgia, 'Times New Roman', serif; color: white; line-height: 1.05; }
+    .universitas { display: block; font-size: 28px; font-weight: 600; letter-spacing: .035em; }
+    .estudios { display: block; font-size: 13px; font-weight: 500; letter-spacing: .06em; margin-top: 7px; }
+    .titulo { min-width: 0; margin-bottom: 28px; }
+    h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 5vw, 2.3rem); }
+    .titulo p { margin: 0; color: #526275; line-height: 1.6; max-width: 640px; }
+    main { padding: 32px 20px 48px; }
+    fieldset { border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 0; background: white; min-width: 0; }
+    legend { font-weight: 650; padding: 0 6px; }
+    .filtros { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .busqueda { grid-column: 1 / -1; }
+    label { font-size: .9rem; font-weight: 600; }
+    select, input, button { font: inherit; min-height: 46px; border-radius: 7px; }
+    select, input { width: 100%; padding: 10px; border: 1px solid #aebcca; background: white; color: inherit; }
+    button { cursor: pointer; padding: 10px 16px; border: 1px solid #8b9bac; background: white; color: #163b59; font-weight: 600; }
+    button:hover { background: #edf3f8; }
+    :focus-visible { outline: 3px solid #2676b3; outline-offset: 3px; }
+    :disabled { cursor: wait; opacity: .7; }
+    .acciones { margin-top: 16px; }
+    #cantidad { font-size: .95rem; color: #526275; margin: 24px 0 14px; }
+    #estado { background: white; border: 1px solid #dce3eb; border-radius: 10px; padding: 24px; line-height: 1.6; }
+    #reintentar { margin: 14px 0; }
+    #resultados { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .mesa { background: white; border: 1px solid #dce3eb; border-top: 4px solid #28618b; border-radius: 10px; padding: 22px; overflow-wrap: anywhere; }
+    .mesa h2 { font-size: 1.13rem; margin: 0 0 10px; }
+    .mesa p { margin: 7px 0; line-height: 1.5; }
+    .carrera, .plan, .turno { color: #526275; font-size: .93rem; }
+    .fecha { padding-top: 10px; border-top: 1px solid #e5eaf0; font-weight: 600; }
+    .hora { font-size: 1.5rem; font-weight: 700; color: #163b59; }
+    footer { margin-top: 28px; color: #526275; font-size: .88rem; line-height: 1.6; }
+    [hidden] { display: none !important; }
+    @media (max-width: 640px) {
+      header { padding: 18px 16px; }
+      .marca { flex-direction: column; align-items: flex-start; gap: 18px; }
+      .logo { width: 56px; }
+      .universitas { font-size: 25px; }
+      .estudios { font-size: 11px; }
+      main { padding: 22px 16px 36px; }
+      .titulo { margin-bottom: 24px; }
+      .filtros, #resultados { grid-template-columns: 1fr; }
+      fieldset { padding: 16px; }
+      .mesa { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="contenedor marca">
+      <div class="identidad" aria-label="Vniversitas Estudios Superiores">
+        <div class="nombre-instituto">
+          <span class="universitas">VNIVERSITAS</span>
+          <span class="estudios">ESTUDIOS SUPERIORES</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="contenedor">
+    <div class="titulo">
+      <h1>Mesas de Exámenes</h1>
+      <p>Consultá las fechas y horarios de las mesas de examen de tu carrera.</p>
+    </div>
+    <fieldset id="filtros" disabled>
+      <legend>Buscar mesas</legend>
+      <div class="filtros">
+        <div class="campo"><label for="carrera">Carrera</label>
+          <select id="carrera"><option value="">Todas las carreras</option></select></div>
+        <div class="campo"><label for="resolucion">Resolución / Plan</label>
+          <select id="resolucion"><option value="">Todos los planes</option></select></div>
+        <div class="campo"><label for="anio">Año</label>
+          <select id="anio"><option value="">Todos los años</option></select></div>
+        <div class="campo busqueda"><label for="busqueda">Materia</label>
+          <input id="busqueda" type="search" placeholder="Escribí el nombre de una materia" autocomplete="off"></div>
+      </div>
+      <div class="acciones"><button id="limpiar" type="button">Limpiar filtros</button></div>
+    </fieldset>
+    <p id="cantidad" role="status" aria-live="polite" aria-atomic="true"></p>
+    <p id="estado" role="status" aria-live="polite">Cargando mesas…</p>
+    <button id="reintentar" type="button" hidden>Volver a intentar</button>
+    <section id="resultados" aria-label="Mesas publicadas" aria-busy="true"></section>
+    <footer>Las fechas y horarios pueden actualizarse. Volvé a cargar la página para consultar la información vigente.</footer>
+  </main>
+  <script>
+    'use strict';
+    // URL de tu Web App en Google Apps Script
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwLcHHA3h1o8001rBW9wEqVxwLZbOEr5LVIEnPsqSOvDF7siu0XFQX2GTltxClDdNS7/exec';
+    
+    let mesas = [];
+    let ui;
+    const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
+    const formatoFecha = new Intl.DateTimeFormat('es-AR', {
+      day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      ui = Object.fromEntries(['carrera', 'resolucion', 'anio', 'busqueda', 'filtros',
+        'estado', 'resultados', 'cantidad', 'limpiar', 'reintentar'].map(id => [id, document.getElementById(id)]));
+      
+      ['carrera', 'resolucion', 'anio'].forEach(id => {
+        ui[id].addEventListener('change', function () { actualizarFiltros(); aplicarFiltros(); });
+      });
+      ui.busqueda.addEventListener('input', aplicarFiltros);
+      ui.limpiar.addEventListener('click', function () {
+        ['carrera', 'resolucion', 'anio', 'busqueda'].forEach(id => { ui[id].value = ''; });
+        actualizarFiltros(); aplicarFiltros();
+      });
+      ui.reintentar.addEventListener('click', cargarMesas);
+      cargarMesas();
+    });
+
+    function cargarMesas() {
+      ui.filtros.disabled = true;
+      ui.reintentar.hidden = true;
+      ui.estado.hidden = false;
+      ui.estado.textContent = 'Cargando mesas…';
+      ui.cantidad.textContent = '';
+      ui.resultados.replaceChildren();
+      ui.resultados.setAttribute('aria-busy', 'true');
+
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(datos => {
+          if (datos.error || !Array.isArray(datos)) { mostrarError(); return; }
+          mesas = datos;
+          ui.filtros.disabled = false;
+          ui.resultados.setAttribute('aria-busy', 'false');
+          actualizarFiltros(); aplicarFiltros();
+        })
+        .catch(() => mostrarError());
+    }
+
+    function mostrarError() {
+      mesas = [];
+      ui.filtros.disabled = true;
+      ui.resultados.replaceChildren();
+      ui.resultados.setAttribute('aria-busy', 'false');
+      ui.cantidad.textContent = '';
+      ui.estado.hidden = false;
+      ui.estado.textContent = 'No pudimos cargar las mesas. Volvé a intentar en unos momentos.';
+      ui.reintentar.hidden = false;
+    }
+
+    function actualizarFiltros() {
+      llenarSelector(ui.carrera, mesas.map(m => m.carrera), 'Todas las carreras');
+      const porCarrera = mesas.filter(m => !ui.carrera.value || m.carrera === ui.carrera.value);
+      llenarSelector(ui.resolucion, porCarrera.map(m => m.resolucion), 'Todos los planes');
+      const porPlan = porCarrera.filter(m => !ui.resolucion.value || m.resolucion === ui.resolucion.value);
+      llenarSelector(ui.anio, porPlan.map(m => m.anio), 'Todos los años');
+    }
+
+    function llenarSelector(selector, valores, etiqueta) {
+      const anterior = selector.value;
+      const opciones = [...new Set(valores.filter(v => v !== ''))].sort(comparar.compare);
+      selector.replaceChildren();
+      ['', ...opciones].forEach(valor => {
+        const opcion = document.createElement('option');
+        opcion.value = valor;
+        opcion.textContent = valor === '' ? etiqueta : valor;
+        selector.append(opcion);
+      });
+      selector.value = opciones.includes(anterior) ? anterior : '';
+    }
+
+    function normalizarBusqueda(texto) {
+      return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    function aplicarFiltros() {
+      const busqueda = normalizarBusqueda(ui.busqueda.value);
+      const resultado = mesas.filter(mesa => {
+        return (!ui.carrera.value || mesa.carrera === ui.carrera.value)
+          && (!ui.resolucion.value || mesa.resolucion === ui.resolucion.value)
+          && (!ui.anio.value || mesa.anio === ui.anio.value)
+          && normalizarBusqueda(mesa.materia).includes(busqueda);
+      });
+      renderizarMesas(resultado);
+    }
+
+    function renderizarMesas(resultado) {
+      ui.resultados.replaceChildren();
+      ui.cantidad.textContent = resultado.length === 1 ? '1 mesa publicada' : resultado.length + ' mesas publicadas';
+      ui.estado.hidden = resultado.length > 0;
+      ui.estado.textContent = resultado.length ? '' : 'No hay mesas publicadas para los criterios seleccionados.';
+      resultado.forEach(mesa => {
+        const tarjeta = document.createElement('article');
+        tarjeta.className = 'mesa';
+        const agregar = (etiqueta, clase, texto) => {
+          const elemento = document.createElement(etiqueta);
+          elemento.className = clase;
+          elemento.textContent = texto;
+          tarjeta.append(elemento);
+          return elemento;
+        };
+        agregar('h2', 'materia', mesa.materia);
+        agregar('p', 'carrera', mesa.carrera);
+        const detalles = [];
+        if (mesa.anio) detalles.push(/^\d+$/.test(mesa.anio) ? mesa.anio + '.º año' : 'Año ' + mesa.anio);
+        if (mesa.resolucion) detalles.push('Res. ' + mesa.resolucion);
+        if (detalles.length) agregar('p', 'plan', detalles.join(' · '));
+        const fecha = agregar('p', 'fecha', '');
+        const tiempo = document.createElement('time');
+        tiempo.setAttribute('datetime', mesa.fecha);
+        tiempo.textContent = mesa.dia + ' ' + formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
+        fecha.append(tiempo);
+        agregar('p', 'hora', mesa.hora + ' hs');
+        const grupos = [];
+        if (mesa.turno) grupos.push('Turno ' + mesa.turno);
+        if (mesa.comision) grupos.push('Comisión ' + mesa.comision);
+        if (grupos.length) agregar('p', 'turno', grupos.join(' · '));
+        ui.resultados.append(tarjeta);
+      });
+    }
+  </script>
+</body>
+</html>
