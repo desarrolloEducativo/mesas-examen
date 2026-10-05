@@ -25,7 +25,7 @@
     main { padding: 32px 20px 48px; }
     fieldset { border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 0; background: white; min-width: 0; }
     legend { font-weight: 650; padding: 0 6px; }
-    .filtros { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .filtros { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
     .busqueda { grid-column: 1 / -1; }
     label { font-size: .9rem; font-weight: 600; }
@@ -87,6 +87,8 @@
           <select id="resolucion"><option value="">Todas las resoluciones</option></select></div>
         <div class="campo"><label for="anio">Año</label>
           <select id="anio"><option value="">Todos los años</option></select></div>
+        <div class="campo"><label for="docente">Docente (titular o vocal)</label>
+          <select id="docente"><option value="">Todos los docentes</option></select></div>
         <div class="campo busqueda"><label for="busqueda">Materia</label>
           <input id="busqueda" type="search" placeholder="Escribí el nombre de una materia" autocomplete="off"></div>
       </div>
@@ -101,7 +103,7 @@
   <script>
     'use strict';
     // URL de tu Web App en Google Apps Script
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyW1Eqi_YNy1hojISevppL_-w55U1sQTRr8JVrGogaSmcdp7FRX_FUhz75iFAVXl-lH/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbw88tuaCRo8OkMfYatnIawBvolWBPPBQZ_Nw4AnKwWyrHF78cGwSZF3tyqrqpZeAsmy/exec';
     
     let mesas = [];
     let ui;
@@ -111,15 +113,15 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-      ui = Object.fromEntries(['carrera', 'resolucion', 'anio', 'busqueda', 'filtros',
+      ui = Object.fromEntries(['carrera', 'resolucion', 'anio', 'docente', 'busqueda', 'filtros',
         'estado', 'resultados', 'cantidad', 'limpiar', 'reintentar'].map(id => [id, document.getElementById(id)]));
       
-      ['carrera', 'resolucion', 'anio'].forEach(id => {
+      ['carrera', 'resolucion', 'anio', 'docente'].forEach(id => {
         ui[id].addEventListener('change', function () { actualizarFiltros(); aplicarFiltros(); });
       });
       ui.busqueda.addEventListener('input', aplicarFiltros);
       ui.limpiar.addEventListener('click', function () {
-        ['carrera', 'resolucion', 'anio', 'busqueda'].forEach(id => { ui[id].value = ''; });
+        ['carrera', 'resolucion', 'anio', 'docente', 'busqueda'].forEach(id => { ui[id].value = ''; });
         actualizarFiltros(); aplicarFiltros();
       });
       ui.reintentar.addEventListener('click', cargarMesas);
@@ -164,6 +166,8 @@
       llenarSelector(ui.resolucion, porCarrera.map(m => m.resolucion), 'Todos los planes');
       const porPlan = porCarrera.filter(m => !ui.resolucion.value || m.resolucion === ui.resolucion.value);
       llenarSelector(ui.anio, porPlan.map(m => m.anio), 'Todos los años');
+      const porAnio = porPlan.filter(m => !ui.anio.value || m.anio === ui.anio.value);
+      llenarSelector(ui.docente, porAnio.flatMap(m => [m.docente || '', m.vocal || '']), 'Todos los docentes');
     }
 
     function llenarSelector(selector, valores, etiqueta) {
@@ -189,6 +193,7 @@
         return (!ui.carrera.value || mesa.carrera === ui.carrera.value)
           && (!ui.resolucion.value || mesa.resolucion === ui.resolucion.value)
           && (!ui.anio.value || mesa.anio === ui.anio.value)
+          && (!ui.docente.value || mesa.docente === ui.docente.value || mesa.vocal === ui.docente.value)
           && normalizarBusqueda(mesa.materia).includes(busqueda);
       });
       renderizarMesas(resultado);
@@ -225,6 +230,8 @@
         if (mesa.turno) grupos.push('Turno ' + mesa.turno);
         if (mesa.comision) grupos.push('Comisión ' + mesa.comision);
         if (grupos.length) agregar('p', 'turno', grupos.join(' · '));
+        agregar('p', 'docente', 'Titular: ' + (mesa.docente || 'No informado'));
+        agregar('p', 'vocal', 'Vocal: ' + (mesa.vocal || 'No informado'));
         ui.resultados.append(tarjeta);
       });
     }
