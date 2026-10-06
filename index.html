@@ -114,7 +114,7 @@
   </main>
   <script>
     'use strict';
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyDJtuNG4xE9lzieAwdLIHTQqr1o0Cp4EqyTDVxnIOKvKkapxckMMCtUPoSerJhiqG3/exec';
+    const API_URL = './mesas.json';
     
     let mesas = [];
     let ui;
@@ -148,16 +148,30 @@
       ui.resultados.replaceChildren();
       ui.resultados.setAttribute('aria-busy', 'true');
 
-      fetch(API_URL)
-        .then(response => response.json())
+      fetch(API_URL, { cache: 'no-cache' })
+        .then(response => {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
         .then(datos => {
-          if (datos.error || !Array.isArray(datos)) { mostrarError(); return; }
+          if (!validarMesas(datos)) { mostrarError(); return; }
           mesas = datos;
           ui.filtros.disabled = false;
           ui.resultados.setAttribute('aria-busy', 'false');
           actualizarFiltros(); aplicarFiltros();
         })
         .catch(() => mostrarError());
+    }
+
+    function validarMesas(datos) {
+      const campos = ['materia', 'carrera', 'resolucion', 'anio', 'fecha', 'dia',
+        'hora', 'turno', 'comision', 'docente', 'vocal'];
+      return Array.isArray(datos) && datos.every(m => {
+        if (!m || typeof m !== 'object' || !campos.every(c => typeof m[c] === 'string')) return false;
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(m.fecha) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(m.hora)) return false;
+        const fecha = new Date(m.fecha + 'T12:00:00Z');
+        return Number.isFinite(fecha.getTime()) && fecha.toISOString().slice(0, 10) === m.fecha;
+      });
     }
 
     function mostrarError() {
@@ -277,11 +291,15 @@
         tribunal.className = 'tribunal';
         
         const pTitular = document.createElement('p');
-        pTitular.innerHTML = '<strong>Titular:</strong> ' + (mesa.docente || 'No informado');
+        const etiquetaTitular = document.createElement('strong');
+        etiquetaTitular.textContent = 'Titular:';
+        pTitular.append(etiquetaTitular, document.createTextNode(' ' + (mesa.docente || 'No informado')));
         tribunal.append(pTitular);
 
         const pVocal = document.createElement('p');
-        pVocal.innerHTML = '<strong>Vocal:</strong> ' + (mesa.vocal || 'No informado');
+        const etiquetaVocal = document.createElement('strong');
+        etiquetaVocal.textContent = 'Vocal:';
+        pVocal.append(etiquetaVocal, document.createTextNode(' ' + (mesa.vocal || 'No informado')));
         tribunal.append(pVocal);
 
         tarjeta.append(tribunal);
