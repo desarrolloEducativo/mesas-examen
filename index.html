@@ -6,21 +6,32 @@
   <title>Mesas de Examen</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root { color-scheme: light; font-family: system-ui, -apple-system, sans-serif; color: #203044; background: #f4f6f9; }
     * { box-sizing: border-box; }
     body { margin: 0; }
-    header { background: #163b59; color: white; padding: 22px 20px; }
+    
+    /* ENCABEZADO CON LOGO OFICIAL */
+    header { background: #112d44; color: white; padding: 18px 20px; border-bottom: 3px solid #28618b; }
     .contenedor { max-width: 1080px; margin: auto; }
-    .marca { display: flex; align-items: center; gap: 24px; }
-    .identidad { display: flex; align-items: center; gap: 14px; flex: 0 1 auto; min-width: 0; }
-    .logo { display: block; width: 64px; height: auto; object-fit: contain; }
-    .nombre-instituto { font-family: 'Cinzel', Georgia, 'Times New Roman', serif; color: white; line-height: 1.05; }
-    .universitas { display: block; font-size: 28px; font-weight: 600; letter-spacing: .035em; }
-    .estudios { display: block; font-size: 13px; font-weight: 500; letter-spacing: .06em; margin-top: 7px; }
+    .marca { display: flex; align-items: center; justify-content: space-between; }
+    .identidad { display: flex; align-items: center; gap: 16px; }
+    
+    /* Estilo para el logo oficial */
+    .logo-img {
+      height: 58px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    
+    .nombre-instituto { font-family: 'Cinzel', Georgia, 'Times New Roman', serif; color: white; line-height: 1.1; }
+    .universitas { display: block; font-size: 24px; font-weight: 700; letter-spacing: .08em; color: #ffffff; }
+    .estudios { display: block; font-size: 11px; font-weight: 500; letter-spacing: .18em; color: #a4c2dc; margin-top: 3px; text-transform: uppercase; }
+    
     .titulo { min-width: 0; margin-bottom: 28px; }
-    h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 5vw, 2.3rem); }
+    h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 5vw, 2.3rem); color: #163b59; }
     .titulo p { margin: 0; color: #526275; line-height: 1.6; max-width: 640px; }
     main { padding: 32px 20px 48px; }
     fieldset { border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 0; background: white; min-width: 0; }
@@ -63,11 +74,10 @@
     [hidden] { display: none !important; }
     
     @media (max-width: 640px) {
-      header { padding: 18px 16px; }
-      .marca { flex-direction: column; align-items: flex-start; gap: 18px; }
-      .logo { width: 56px; }
-      .universitas { font-size: 25px; }
-      .estudios { font-size: 11px; }
+      header { padding: 14px 16px; }
+      .logo-img { height: 46px; }
+      .universitas { font-size: 19px; }
+      .estudios { font-size: 9px; }
       main { padding: 22px 16px 36px; }
       .titulo { margin-bottom: 24px; }
       .filtros, #resultados { grid-template-columns: 1fr; }
@@ -80,9 +90,10 @@
   <header>
     <div class="contenedor marca">
       <div class="identidad" aria-label="Vniversitas Estudios Superiores">
+        <img src="https://drive.google.com/uc?export=download&id=12j9K0NqSpkv717i90woIBvyO8B6S-dGt" alt="Logo Vniversitas" class="logo-img">
         <div class="nombre-instituto">
           <span class="universitas">VNIVERSITAS</span>
-          <span class="estudios">ESTUDIOS SUPERIORES</span>
+          <span class="estudios">Estudios Superiores</span>
         </div>
       </div>
     </div>
@@ -222,79 +233,5 @@
         const tarjeta = document.createElement('article');
         tarjeta.className = 'mesa';
 
-        // Cabecera de la materia y carrera
         const encab = document.createElement('div');
-        const h2 = document.createElement('h2');
-        h2.textContent = mesa.materia;
-        encab.append(h2);
-
-        const carrera = document.createElement('p');
-        carrera.className = 'carrera';
-        carrera.textContent = mesa.carrera;
-        encab.append(carrera);
-
-        const detalles = [];
-        if (mesa.anio) detalles.push(/^\d+$/.test(mesa.anio) ? mesa.anio + '.º año' : 'Año ' + mesa.anio);
-        if (mesa.resolucion) detalles.push('Res. ' + mesa.resolucion);
-        if (detalles.length) {
-          const plan = document.createElement('p');
-          plan.className = 'plan';
-          plan.textContent = detalles.join(' · ');
-          encab.append(plan);
-        }
-        tarjeta.append(encab);
-
-        // Bloque Fecha / Hora
-        const bloqueHorario = document.createElement('div');
-        bloqueHorario.className = 'bloque-horario';
-        
-        const fecha = document.createElement('p');
-        fecha.className = 'fecha';
-        const tiempo = document.createElement('time');
-        tiempo.setAttribute('datetime', mesa.fecha);
-        tiempo.textContent = mesa.dia + ' ' + formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
-        fecha.append(tiempo);
-        bloqueHorario.append(fecha);
-
-        const hora = document.createElement('p');
-        hora.className = 'hora';
-        hora.textContent = mesa.hora + ' hs';
-        bloqueHorario.append(hora);
-
-        // Badges Turno / Comisión
-        const grupos = [];
-        if (mesa.turno) grupos.push('Turno ' + mesa.turno);
-        if (mesa.comision) grupos.push('Comisión ' + mesa.comision);
-        if (grupos.length) {
-          const badges = document.createElement('div');
-          badges.className = 'badges';
-          grupos.forEach(texto => {
-            const badge = document.createElement('span');
-            badge.className = 'badge';
-            badge.textContent = texto;
-            badges.append(badge);
-          });
-          bloqueHorario.append(badges);
-        }
-        tarjeta.append(bloqueHorario);
-
-        // Tribunal Examinador (Docentes)
-        const tribunal = document.createElement('div');
-        tribunal.className = 'tribunal';
-        
-        const pTitular = document.createElement('p');
-        pTitular.innerHTML = '<strong>Titular:</strong> ' + (mesa.docente || 'No informado');
-        tribunal.append(pTitular);
-
-        const pVocal = document.createElement('p');
-        pVocal.innerHTML = '<strong>Vocal:</strong> ' + (mesa.vocal || 'No informado');
-        tribunal.append(pVocal);
-
-        tarjeta.append(tribunal);
-
-        ui.resultados.append(tarjeta);
-      });
-    }
-  </script>
-</body>
-</html>
+        const h2 = document.createElement('h2
