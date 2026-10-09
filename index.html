@@ -19,7 +19,7 @@
     /* Encabezado institucional */
     header {
       background: white;
-      padding: 20px;
+      padding: 10px 20px;
       border-bottom: 3px solid #28618b;
     }
 
@@ -37,7 +37,7 @@
     .logo-institucional {
       display: block;
       width: 100%;
-      max-width: 900px;
+      max-width: 560px;
       height: auto;
     }
 
@@ -244,12 +244,15 @@
     [hidden] { display: none !important; }
 
     @media (max-width: 640px) {
-      header { padding: 14px 16px; }
+      header {padding: 8px 16px;}
       main { padding: 22px 16px 36px; }
       .titulo { margin-bottom: 24px; }
       .filtros, #resultados { grid-template-columns: 1fr; }
       fieldset { padding: 16px; }
       .mesa { padding: 18px; }
+      .logo-institucional {
+  max-width: 280px;
+}
     }
   </style>
 </head>
