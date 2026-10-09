@@ -4,70 +4,247 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mesas de Examen</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root { color-scheme: light; font-family: system-ui, -apple-system, sans-serif; color: #203044; background: #f4f6f9; }
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #203044;
+      background: #f4f6f9;
+    }
+
     * { box-sizing: border-box; }
     body { margin: 0; }
-    
-    /* ENCABEZADO SOLO TEXTO */
-    header { background: #112d44; color: white; padding: 22px 20px; border-bottom: 3px solid #28618b; }
-    .contenedor { max-width: 1080px; margin: auto; }
-    .marca { display: flex; align-items: center; }
-    
-    .nombre-instituto { font-family: 'Cinzel', Georgia, 'Times New Roman', serif; color: white; line-height: 1.1; }
-    .universitas { display: block; font-size: 26px; font-weight: 700; letter-spacing: .08em; color: #ffffff; }
-    .estudios { display: block; font-size: 11px; font-weight: 500; letter-spacing: .18em; color: #a4c2dc; margin-top: 4px; text-transform: uppercase; }
-    
-    .titulo { min-width: 0; margin-bottom: 28px; }
-    h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 5vw, 2.3rem); color: #163b59; }
-    .titulo p { margin: 0; color: #526275; line-height: 1.6; max-width: 640px; }
+
+    /* Encabezado institucional */
+    header {
+      background: white;
+      padding: 20px;
+      border-bottom: 3px solid #28618b;
+    }
+
+    .contenedor {
+      max-width: 1080px;
+      margin: auto;
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-institucional {
+      display: block;
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+    }
+
+    .titulo {
+      min-width: 0;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.7rem, 5vw, 2.3rem);
+      color: #163b59;
+    }
+
+    .titulo p {
+      margin: 0;
+      color: #526275;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
     main { padding: 32px 20px 48px; }
-    fieldset { border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 0; background: white; min-width: 0; }
-    legend { font-weight: 650; padding: 0 6px; }
-    .filtros { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+
+    fieldset {
+      border: 1px solid #dce3eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 0;
+      background: white;
+      min-width: 0;
+    }
+
+    legend {
+      font-weight: 650;
+      padding: 0 6px;
+    }
+
+    .filtros {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
     .busqueda { grid-column: 1 / -1; }
-    label { font-size: .9rem; font-weight: 600; }
-    select, input, button { font: inherit; min-height: 46px; border-radius: 7px; }
-    select, input { width: 100%; padding: 10px; border: 1px solid #aebcca; background: white; color: inherit; }
-    button { cursor: pointer; padding: 10px 16px; border: 1px solid #8b9bac; background: white; color: #163b59; font-weight: 600; }
+
+    label {
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    select, input, button {
+      font: inherit;
+      min-height: 46px;
+      border-radius: 7px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #aebcca;
+      background: white;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      padding: 10px 16px;
+      border: 1px solid #8b9bac;
+      background: white;
+      color: #163b59;
+      font-weight: 600;
+    }
+
     button:hover { background: #edf3f8; }
-    :focus-visible { outline: 3px solid #2676b3; outline-offset: 3px; }
-    :disabled { cursor: wait; opacity: .7; }
+
+    :focus-visible {
+      outline: 3px solid #2676b3;
+      outline-offset: 3px;
+    }
+
+    :disabled {
+      cursor: wait;
+      opacity: .7;
+    }
+
     .acciones { margin-top: 16px; }
-    #cantidad { font-size: .95rem; color: #526275; margin: 24px 0 14px; }
-    #estado { background: white; border: 1px solid #dce3eb; border-radius: 10px; padding: 24px; line-height: 1.6; }
+
+    #cantidad {
+      font-size: .95rem;
+      color: #526275;
+      margin: 24px 0 14px;
+    }
+
+    #estado {
+      background: white;
+      border: 1px solid #dce3eb;
+      border-radius: 10px;
+      padding: 24px;
+      line-height: 1.6;
+    }
+
     #reintentar { margin: 14px 0; }
-    #resultados { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    
-    /* Tarjeta de Mesa */
-    .mesa { background: white; border: 1px solid #dce3eb; border-top: 4px solid #28618b; border-radius: 10px; padding: 22px; overflow-wrap: anywhere; display: flex; flex-direction: column; justify-content: space-between; }
-    .mesa h2 { font-size: 1.15rem; margin: 0 0 6px; color: #163b59; }
-    .mesa p { margin: 4px 0; line-height: 1.5; }
-    .carrera { font-weight: 600; color: #203044; font-size: .95rem; }
-    .plan { color: #526275; font-size: .88rem; }
-    
-    .bloque-horario { margin-top: 14px; padding-top: 12px; border-top: 1px solid #e5eaf0; }
-    .fecha { font-weight: 600; color: #203044; }
-    .hora { font-size: 1.4rem; font-weight: 700; color: #163b59; margin-top: 2px !important; }
-    
-    .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-    .badge { background: #edf3f8; color: #163b59; font-size: .8rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
-    
-    .tribunal { margin-top: 14px; padding-top: 10px; border-top: 1px dashed #dce3eb; font-size: .88rem; color: #526275; }
+
+    #resultados {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    /* Tarjeta de mesa */
+    .mesa {
+      background: white;
+      border: 1px solid #dce3eb;
+      border-top: 4px solid #28618b;
+      border-radius: 10px;
+      padding: 22px;
+      overflow-wrap: anywhere;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mesa h2 {
+      font-size: 1.15rem;
+      margin: 0 0 6px;
+      color: #163b59;
+    }
+
+    .mesa p {
+      margin: 4px 0;
+      line-height: 1.5;
+    }
+
+    .carrera {
+      font-weight: 600;
+      color: #203044;
+      font-size: .95rem;
+    }
+
+    .plan {
+      color: #526275;
+      font-size: .88rem;
+    }
+
+    .bloque-horario {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #e5eaf0;
+    }
+
+    .fecha {
+      font-weight: 600;
+      color: #203044;
+    }
+
+    .hora {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #163b59;
+      margin-top: 2px !important;
+    }
+
+    .badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .badge {
+      background: #edf3f8;
+      color: #163b59;
+      font-size: .8rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .tribunal {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed #dce3eb;
+      font-size: .88rem;
+      color: #526275;
+    }
+
     .tribunal p { margin: 2px 0; }
     .tribunal strong { color: #163b59; }
 
-    footer { margin-top: 28px; color: #526275; font-size: .88rem; line-height: 1.6; }
+    footer {
+      margin-top: 28px;
+      color: #526275;
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+
     [hidden] { display: none !important; }
-    
+
     @media (max-width: 640px) {
-      header { padding: 18px 16px; }
-      .universitas { font-size: 21px; }
-      .estudios { font-size: 9.5px; }
+      header { padding: 14px 16px; }
       main { padding: 22px 16px 36px; }
       .titulo { margin-bottom: 24px; }
       .filtros, #resultados { grid-template-columns: 1fr; }
@@ -76,66 +253,156 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="contenedor marca">
-      <div class="nombre-instituto">
-        <span class="universitas">VNIVERSITAS</span>
-        <span class="estudios">Estudios Superiores</span>
-      </div>
+      <img
+        class="logo-institucional"
+        src="./logo-universitas.png"
+        alt="Universitas — Nivel Superior, DIEGEP 4031"
+        fetchpriority="high"
+      >
     </div>
   </header>
+
   <main class="contenedor">
     <div class="titulo">
       <h1>Mesas de Examen</h1>
       <p>Consultá las fechas y horarios de las mesas de examen de tu carrera.</p>
     </div>
+
     <fieldset id="filtros" disabled>
       <legend>Buscar mesas</legend>
+
       <div class="filtros">
-        <div class="campo"><label for="carrera">Carrera</label>
-          <select id="carrera"><option value="">Todas las carreras</option></select></div>
-        <div class="campo"><label for="resolucion">Resolución</label>
-          <select id="resolucion"><option value="">Todas las resoluciones</option></select></div>
-        <div class="campo"><label for="anio">Año</label>
-          <select id="anio"><option value="">Todos los años</option></select></div>
-        <div class="campo"><label for="docente">Docente (titular o vocal)</label>
-          <select id="docente"><option value="">Todos los docentes</option></select></div>
-        <div class="campo busqueda"><label for="busqueda">Materia</label>
-          <input id="busqueda" type="search" placeholder="Escribí el nombre de una materia" autocomplete="off"></div>
+        <div class="campo">
+          <label for="carrera">Carrera</label>
+          <select id="carrera">
+            <option value="">Todas las carreras</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="resolucion">Resolución</label>
+          <select id="resolucion">
+            <option value="">Todas las resoluciones</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="anio">Año</label>
+          <select id="anio">
+            <option value="">Todos los años</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="docente">Docente (titular o vocal)</label>
+          <select id="docente">
+            <option value="">Todos los docentes</option>
+          </select>
+        </div>
+
+        <div class="campo busqueda">
+          <label for="busqueda">Materia</label>
+          <input
+            id="busqueda"
+            type="search"
+            placeholder="Escribí el nombre de una materia"
+            autocomplete="off"
+          >
+        </div>
       </div>
-      <div class="acciones"><button id="limpiar" type="button">Limpiar filtros</button></div>
+
+      <div class="acciones">
+        <button id="limpiar" type="button">Limpiar filtros</button>
+      </div>
     </fieldset>
-    <p id="cantidad" role="status" aria-live="polite" aria-atomic="true"></p>
-    <p id="estado" role="status" aria-live="polite">Cargando mesas…</p>
-    <button id="reintentar" type="button" hidden>Volver a intentar</button>
-    <section id="resultados" aria-label="Mesas publicadas" aria-busy="true"></section>
-    <footer>Las fechas y horarios pueden actualizarse. Volvé a cargar la página para consultar la información vigente.</footer>
+
+    <p
+      id="cantidad"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></p>
+
+    <p id="estado" role="status" aria-live="polite">
+      Cargando mesas…
+    </p>
+
+    <button id="reintentar" type="button" hidden>
+      Volver a intentar
+    </button>
+
+    <section
+      id="resultados"
+      aria-label="Mesas publicadas"
+      aria-busy="true"
+    ></section>
+
+    <footer>
+      Las fechas y horarios pueden actualizarse. Volvé a cargar la página
+      para consultar la información vigente.
+    </footer>
   </main>
+
   <script>
     'use strict';
+
     const API_URL = './mesas.json';
-    
+
     let mesas = [];
     let ui;
-    const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
+
+    const comparar = new Intl.Collator('es', {
+      numeric: true,
+      sensitivity: 'base'
+    });
+
     const formatoFecha = new Intl.DateTimeFormat('es-AR', {
-      day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC'
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-      ui = Object.fromEntries(['carrera', 'resolucion', 'anio', 'docente', 'busqueda', 'filtros',
-        'estado', 'resultados', 'cantidad', 'limpiar', 'reintentar'].map(id => [id, document.getElementById(id)]));
-      
+      ui = Object.fromEntries([
+        'carrera',
+        'resolucion',
+        'anio',
+        'docente',
+        'busqueda',
+        'filtros',
+        'estado',
+        'resultados',
+        'cantidad',
+        'limpiar',
+        'reintentar'
+      ].map(id => [id, document.getElementById(id)]));
+
       ['carrera', 'resolucion', 'anio', 'docente'].forEach(id => {
-        ui[id].addEventListener('change', function () { actualizarFiltros(); aplicarFiltros(); });
+        ui[id].addEventListener('change', function () {
+          actualizarFiltros();
+          aplicarFiltros();
+        });
       });
+
       ui.busqueda.addEventListener('input', aplicarFiltros);
+
       ui.limpiar.addEventListener('click', function () {
-        ['carrera', 'resolucion', 'anio', 'docente', 'busqueda'].forEach(id => { ui[id].value = ''; });
-        actualizarFiltros(); aplicarFiltros();
+        ['carrera', 'resolucion', 'anio', 'docente', 'busqueda']
+          .forEach(id => {
+            ui[id].value = '';
+          });
+
+        actualizarFiltros();
+        aplicarFiltros();
       });
+
       ui.reintentar.addEventListener('click', cargarMesas);
+
       cargarMesas();
     });
 
@@ -150,27 +417,63 @@
 
       fetch(API_URL, { cache: 'no-cache' })
         .then(response => {
-          if (!response.ok) throw new Error('HTTP ' + response.status);
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+          }
+
           return response.json();
         })
         .then(datos => {
-          if (!validarMesas(datos)) { mostrarError(); return; }
+          if (!validarMesas(datos)) {
+            mostrarError();
+            return;
+          }
+
           mesas = datos;
           ui.filtros.disabled = false;
           ui.resultados.setAttribute('aria-busy', 'false');
-          actualizarFiltros(); aplicarFiltros();
+
+          actualizarFiltros();
+          aplicarFiltros();
         })
         .catch(() => mostrarError());
     }
 
     function validarMesas(datos) {
-      const campos = ['materia', 'carrera', 'resolucion', 'anio', 'fecha', 'dia',
-        'hora', 'turno', 'comision', 'docente', 'vocal'];
+      const campos = [
+        'materia',
+        'carrera',
+        'resolucion',
+        'anio',
+        'fecha',
+        'dia',
+        'hora',
+        'turno',
+        'comision',
+        'docente',
+        'vocal'
+      ];
+
       return Array.isArray(datos) && datos.every(m => {
-        if (!m || typeof m !== 'object' || !campos.every(c => typeof m[c] === 'string')) return false;
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(m.fecha) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(m.hora)) return false;
+        if (
+          !m ||
+          typeof m !== 'object' ||
+          !campos.every(c => typeof m[c] === 'string')
+        ) {
+          return false;
+        }
+
+        if (
+          !/^\d{4}-\d{2}-\d{2}$/.test(m.fecha) ||
+          !/^([01]\d|2[0-3]):[0-5]\d$/.test(m.hora)
+        ) {
+          return false;
+        }
+
         const fecha = new Date(m.fecha + 'T12:00:00Z');
-        return Number.isFinite(fecha.getTime()) && fecha.toISOString().slice(0, 10) === m.fecha;
+
+        return Number.isFinite(fecha.getTime()) &&
+          fecha.toISOString().slice(0, 10) === m.fecha;
       });
     }
 
@@ -181,60 +484,117 @@
       ui.resultados.setAttribute('aria-busy', 'false');
       ui.cantidad.textContent = '';
       ui.estado.hidden = false;
-      ui.estado.textContent = 'No pudimos cargar las mesas. Volvé a intentar en unos momentos.';
+      ui.estado.textContent =
+        'No pudimos cargar las mesas. Volvé a intentar en unos momentos.';
       ui.reintentar.hidden = false;
     }
 
     function actualizarFiltros() {
-      llenarSelector(ui.carrera, mesas.map(m => m.carrera), 'Todas las carreras');
-      const porCarrera = mesas.filter(m => !ui.carrera.value || m.carrera === ui.carrera.value);
-      llenarSelector(ui.resolucion, porCarrera.map(m => m.resolucion), 'Todas las resoluciones');
-      const porPlan = porCarrera.filter(m => !ui.resolucion.value || m.resolucion === ui.resolucion.value);
-      llenarSelector(ui.anio, porPlan.map(m => m.anio), 'Todos los años');
-      const porAnio = porPlan.filter(m => !ui.anio.value || m.anio === ui.anio.value);
-      llenarSelector(ui.docente, porAnio.flatMap(m => [m.docente || '', m.vocal || '']), 'Todos los docentes');
+      llenarSelector(
+        ui.carrera,
+        mesas.map(m => m.carrera),
+        'Todas las carreras'
+      );
+
+      const porCarrera = mesas.filter(m =>
+        !ui.carrera.value || m.carrera === ui.carrera.value
+      );
+
+      llenarSelector(
+        ui.resolucion,
+        porCarrera.map(m => m.resolucion),
+        'Todas las resoluciones'
+      );
+
+      const porPlan = porCarrera.filter(m =>
+        !ui.resolucion.value || m.resolucion === ui.resolucion.value
+      );
+
+      llenarSelector(
+        ui.anio,
+        porPlan.map(m => m.anio),
+        'Todos los años'
+      );
+
+      const porAnio = porPlan.filter(m =>
+        !ui.anio.value || m.anio === ui.anio.value
+      );
+
+      llenarSelector(
+        ui.docente,
+        porAnio.flatMap(m => [m.docente || '', m.vocal || '']),
+        'Todos los docentes'
+      );
     }
 
     function llenarSelector(selector, valores, etiqueta) {
       const anterior = selector.value;
-      const opciones = [...new Set(valores.filter(v => v !== ''))].sort(comparar.compare);
+
+      const opciones = [...new Set(
+        valores.filter(v => v !== '')
+      )].sort(comparar.compare);
+
       selector.replaceChildren();
+
       ['', ...opciones].forEach(valor => {
         const opcion = document.createElement('option');
+
         opcion.value = valor;
         opcion.textContent = valor === '' ? etiqueta : valor;
+
         selector.append(opcion);
       });
+
       selector.value = opciones.includes(anterior) ? anterior : '';
     }
 
     function normalizarBusqueda(texto) {
-      return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+      return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
     }
 
     function aplicarFiltros() {
       const busqueda = normalizarBusqueda(ui.busqueda.value);
+
       const resultado = mesas.filter(mesa => {
-        return (!ui.carrera.value || mesa.carrera === ui.carrera.value)
-          && (!ui.resolucion.value || mesa.resolucion === ui.resolucion.value)
-          && (!ui.anio.value || mesa.anio === ui.anio.value)
-          && (!ui.docente.value || mesa.docente === ui.docente.value || mesa.vocal === ui.docente.value)
-          && normalizarBusqueda(mesa.materia).includes(busqueda);
+        return (
+          (!ui.carrera.value || mesa.carrera === ui.carrera.value) &&
+          (!ui.resolucion.value || mesa.resolucion === ui.resolucion.value) &&
+          (!ui.anio.value || mesa.anio === ui.anio.value) &&
+          (
+            !ui.docente.value ||
+            mesa.docente === ui.docente.value ||
+            mesa.vocal === ui.docente.value
+          ) &&
+          normalizarBusqueda(mesa.materia).includes(busqueda)
+        );
       });
+
       renderizarMesas(resultado);
     }
 
     function renderizarMesas(resultado) {
       ui.resultados.replaceChildren();
-      ui.cantidad.textContent = resultado.length === 1 ? '1 mesa publicada' : resultado.length + ' mesas publicadas';
+
+      ui.cantidad.textContent = resultado.length === 1
+        ? '1 mesa publicada'
+        : resultado.length + ' mesas publicadas';
+
       ui.estado.hidden = resultado.length > 0;
-      ui.estado.textContent = resultado.length ? '' : 'No hay mesas publicadas para los criterios seleccionados.';
-      
+
+      ui.estado.textContent = resultado.length
+        ? ''
+        : 'No hay mesas publicadas para los criterios seleccionados.';
+
       resultado.forEach(mesa => {
         const tarjeta = document.createElement('article');
         tarjeta.className = 'mesa';
 
         const encab = document.createElement('div');
+
         const h2 = document.createElement('h2');
         h2.textContent = mesa.materia;
         encab.append(h2);
@@ -245,24 +605,40 @@
         encab.append(carrera);
 
         const detalles = [];
-        if (mesa.anio) detalles.push(/^\d+$/.test(mesa.anio) ? mesa.anio + '.º año' : 'Año ' + mesa.anio);
-        if (mesa.resolucion) detalles.push('Res. ' + mesa.resolucion);
+
+        if (mesa.anio) {
+          detalles.push(
+            /^\d+$/.test(mesa.anio)
+              ? mesa.anio + '.º año'
+              : 'Año ' + mesa.anio
+          );
+        }
+
+        if (mesa.resolucion) {
+          detalles.push('Res. ' + mesa.resolucion);
+        }
+
         if (detalles.length) {
           const plan = document.createElement('p');
           plan.className = 'plan';
           plan.textContent = detalles.join(' · ');
           encab.append(plan);
         }
+
         tarjeta.append(encab);
 
         const bloqueHorario = document.createElement('div');
         bloqueHorario.className = 'bloque-horario';
-        
+
         const fecha = document.createElement('p');
         fecha.className = 'fecha';
+
         const tiempo = document.createElement('time');
         tiempo.setAttribute('datetime', mesa.fecha);
-        tiempo.textContent = mesa.dia + ' ' + formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
+        tiempo.textContent =
+          mesa.dia + ' ' +
+          formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
+
         fecha.append(tiempo);
         bloqueHorario.append(fecha);
 
@@ -272,38 +648,59 @@
         bloqueHorario.append(hora);
 
         const grupos = [];
-        if (mesa.turno) grupos.push('Turno ' + mesa.turno);
-        if (mesa.comision) grupos.push('Comisión ' + mesa.comision);
+
+        if (mesa.turno) {
+          grupos.push('Turno ' + mesa.turno);
+        }
+
+        if (mesa.comision) {
+          grupos.push('Comisión ' + mesa.comision);
+        }
+
         if (grupos.length) {
           const badges = document.createElement('div');
           badges.className = 'badges';
+
           grupos.forEach(texto => {
             const badge = document.createElement('span');
             badge.className = 'badge';
             badge.textContent = texto;
             badges.append(badge);
           });
+
           bloqueHorario.append(badges);
         }
+
         tarjeta.append(bloqueHorario);
 
         const tribunal = document.createElement('div');
         tribunal.className = 'tribunal';
-        
+
         const pTitular = document.createElement('p');
+
         const etiquetaTitular = document.createElement('strong');
         etiquetaTitular.textContent = 'Titular:';
-        pTitular.append(etiquetaTitular, document.createTextNode(' ' + (mesa.docente || 'No informado')));
+
+        pTitular.append(
+          etiquetaTitular,
+          document.createTextNode(' ' + (mesa.docente || 'No informado'))
+        );
+
         tribunal.append(pTitular);
 
         const pVocal = document.createElement('p');
+
         const etiquetaVocal = document.createElement('strong');
         etiquetaVocal.textContent = 'Vocal:';
-        pVocal.append(etiquetaVocal, document.createTextNode(' ' + (mesa.vocal || 'No informado')));
+
+        pVocal.append(
+          etiquetaVocal,
+          document.createTextNode(' ' + (mesa.vocal || 'No informado'))
+        );
+
         tribunal.append(pVocal);
 
         tarjeta.append(tribunal);
-
         ui.resultados.append(tarjeta);
       });
     }
