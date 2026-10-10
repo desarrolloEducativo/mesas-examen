@@ -31,8 +31,8 @@
     caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: bold; }
     th, td { border: 1px solid #88929e; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
     th { background: #e8edf2; }
-    .materia { width: 25%; } .plan { width: 7%; } .comision { width: 6%; }
-    .fecha { width: 10%; } .hora { width: 6%; } .persona { width: 15.33%; }
+    .materia { width: 23%; } .plan { width: 10%; } .comision { width: 9%; }
+    .fecha { width: 10%; } .hora { width: 6%; } .persona { width: 14%; }
     @media (max-width: 650px) {
       .herramientas { margin: 12px; padding: 18px; }
       .bloque { padding: 18px; }
@@ -127,7 +127,7 @@
       tabla.append(texto('caption', anio ? 'Año ' + anio : 'Año no informado'));
       const cabecera = document.createElement('thead');
       const filaCabecera = document.createElement('tr');
-      const columnas = [['Materia', 'materia'], ['Plan / Res.', 'plan'], ['Com.', 'comision'],
+      const columnas = [['Materia', 'materia'], ['Resolución', 'plan'], ['Comisión', 'comision'],
         ['Fecha', 'fecha'], ['Hora', 'hora'], ['Titular', 'persona'], ['Vocal 1', 'persona'], ['Vocal 2', 'persona']];
       columnas.forEach(([titulo, clase]) => {
         const celda = texto('th', titulo);
