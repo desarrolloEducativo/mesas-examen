@@ -487,8 +487,7 @@ input {
         'hora',
         'turno',
         'comision',
-        'docente',
-        'vocal'
+        'docente'
       ];
 
       return Array.isArray(datos) && datos.every(m => {
@@ -499,6 +498,11 @@ input {
         ) {
           return false;
         }
+
+        const vocalesValidos =
+          (typeof m.vocal1 === 'string' && typeof m.vocal2 === 'string') ||
+          (m.vocal1 === undefined && m.vocal2 === undefined && typeof m.vocal === 'string');
+        if (!vocalesValidos) return false;
 
         if (
           !/^\d{4}-\d{2}-\d{2}$/.test(m.fecha) ||
@@ -559,7 +563,7 @@ input {
 
       llenarSelector(
         ui.docente,
-        porAnio.flatMap(m => [m.docente || '', m.vocal || '']),
+        porAnio.flatMap(m => [m.docente || '', ...obtenerVocales(m)]),
         'Todos los docentes'
       );
     }
@@ -593,6 +597,11 @@ input {
         .trim();
     }
 
+    function obtenerVocales(mesa) {
+      // Compatibilidad con el listado publicado antes de separar los vocales.
+      return [mesa.vocal1 ?? mesa.vocal ?? '', mesa.vocal2 ?? ''];
+    }
+
     function aplicarFiltros() {
       const busqueda = normalizarBusqueda(ui.busqueda.value);
 
@@ -604,7 +613,7 @@ input {
           (
             !ui.docente.value ||
             mesa.docente === ui.docente.value ||
-            mesa.vocal === ui.docente.value
+            obtenerVocales(mesa).includes(ui.docente.value)
           ) &&
           normalizarBusqueda(mesa.materia).includes(busqueda)
         );
@@ -725,17 +734,16 @@ input {
 
         tribunal.append(pTitular);
 
-        const pVocal = document.createElement('p');
-
-        const etiquetaVocal = document.createElement('strong');
-        etiquetaVocal.textContent = 'Vocal:';
-
-        pVocal.append(
-          etiquetaVocal,
-          document.createTextNode(' ' + (mesa.vocal || 'No informado'))
-        );
-
-        tribunal.append(pVocal);
+        obtenerVocales(mesa).forEach((vocal, indice) => {
+          const pVocal = document.createElement('p');
+          const etiquetaVocal = document.createElement('strong');
+          etiquetaVocal.textContent = 'Vocal ' + (indice + 1) + ':';
+          pVocal.append(
+            etiquetaVocal,
+            document.createTextNode(' ' + (vocal || 'No informado'))
+          );
+          tribunal.append(pVocal);
+        });
 
         tarjeta.append(tribunal);
         ui.resultados.append(tarjeta);
