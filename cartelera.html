@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Cartelera · Mesas de examen</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eef1f5; color: #192433; font-family: Arial, sans-serif; }
+    .herramientas { max-width: 1200px; margin: 28px auto; padding: 24px; background: white; border-radius: 12px; }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    .ayuda { color: #536174; line-height: 1.5; }
+    fieldset { border: 0; padding: 0; margin: 22px 0 12px; display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
+    label { display: grid; gap: 7px; font-weight: bold; }
+    select, button { min-height: 44px; padding: 10px 14px; border: 1px solid #b7c1cd; border-radius: 6px; font: inherit; }
+    select { max-width: 100%; background: white; }
+    button { background: #173c65; color: white; cursor: pointer; }
+    button:disabled { opacity: .5; cursor: default; }
+    :focus-visible { outline: 3px solid #d68a20; outline-offset: 3px; }
+    #estado { margin-bottom: 0; }
+    #cartelera { max-width: 1200px; margin: 0 auto 40px; }
+    .bloque { margin-bottom: 24px; background: white; padding: 28px; }
+    .encabezado { display: flex; align-items: center; gap: 24px; border-bottom: 3px solid #192433; padding-bottom: 16px; }
+    .encabezado img { width: 150px; height: 70px; object-fit: contain; }
+    .encabezado p { margin: 0 0 6px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .encabezado h2 { margin: 0 0 6px; font-size: 24px; }
+    .encabezado .turno { font-size: 18px; font-weight: bold; text-transform: none; letter-spacing: 0; }
+    .tabla { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+    caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: bold; }
+    th, td { border: 1px solid #88929e; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
+    th { background: #e8edf2; }
+    .materia { width: 25%; } .plan { width: 7%; } .comision { width: 6%; }
+    .fecha { width: 10%; } .hora { width: 6%; } .persona { width: 15.33%; }
+    @media (max-width: 650px) {
+      .herramientas { margin: 12px; padding: 18px; }
+      .bloque { padding: 18px; }
+      fieldset, label { width: 100%; }
+      .encabezado { align-items: start; gap: 12px; }
+      .encabezado img { width: 90px; }
+      .encabezado h2 { font-size: 20px; }
+      table { min-width: 950px; }
+    }
+    @page { size: A4 landscape; margin: 12mm; }
+    @media print {
+      body { background: white; color: black; }
+      .herramientas { display: none; }
+      #cartelera { max-width: none; margin: 0; }
+      .bloque { margin: 0; padding: 0; break-before: page; }
+      .bloque:first-child { break-before: auto; }
+      .encabezado { break-inside: avoid; break-after: avoid; }
+      .tabla { overflow: visible; }
+      table { min-width: 0; margin-top: 6mm; }
+      caption { break-after: avoid; }
+      thead { display: table-header-group; }
+      tr { break-inside: avoid; }
+      th, td { padding: 2.2mm 1.7mm; font-size: 10pt; color: black; }
+      th { background: white; }
+      .encabezado h2 { font-size: 19pt; }
+    }
+  </style>
+</head>
+<body>
+  <header class="herramientas">
+    <h1>Cartelera de mesas de examen</h1>
+    <p class="ayuda">Elegí qué mesas imprimir. Cada año comienza en una página nueva, con su carrera y turno en el encabezado.</p>
+    <fieldset id="filtros" disabled aria-label="Selección de mesas">
+      <label>Carrera<select id="carrera"><option value="">Todas las carreras</option></select></label>
+      <label>Turno<select id="turno"><option value="">Todos los turnos</option></select></label>
+      <button id="imprimir" type="button" disabled>Imprimir / Guardar PDF</button>
+    </fieldset>
+    <p class="ayuda">Formato A4 horizontal. En el diálogo de impresión podés guardar como PDF y desactivar los encabezados y pies del navegador.</p>
+    <p id="estado" role="status" aria-live="polite">Cargando mesas…</p>
+    <button id="reintentar" type="button" hidden>Reintentar</button>
+  </header>
+  <main id="cartelera" aria-label="Mesas para imprimir" aria-busy="true"></main>
+  <script>
+    const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
+    const ui = Object.fromEntries(['carrera', 'turno', 'filtros', 'imprimir', 'estado', 'reintentar', 'cartelera']
+      .map(id => [id, document.getElementById(id)]));
+    let mesas = [];
+
+    function validarMesas(datos) {
+      const campos = ['materia', 'carrera', 'turno', 'anio', 'resolucion', 'comision', 'fecha', 'hora', 'docente'];
+      return Array.isArray(datos) && datos.every(m => {
+        if (!m || !campos.every(c => typeof m[c] === 'string')) return false;
+        const vocalesValidos = (typeof m.vocal1 === 'string' && typeof m.vocal2 === 'string') ||
+          (m.vocal1 === undefined && m.vocal2 === undefined && typeof m.vocal === 'string');
+        if (!vocalesValidos || !/^\d{4}-\d{2}-\d{2}$/.test(m.fecha) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(m.hora)) return false;
+        const fecha = new Date(m.fecha + 'T12:00:00Z');
+        return Number.isFinite(fecha.getTime()) && fecha.toISOString().slice(0, 10) === m.fecha;
+      });
+    }
+
+    function llenarSelector(selector, valores, etiqueta) {
+      const anterior = selector.value;
+      const opciones = [...new Set(valores)].sort(comparar.compare);
+      selector.replaceChildren(new Option(etiqueta, ''));
+      opciones.forEach(valor => selector.add(new Option(valor || 'Sin informar', valor)));
+      selector.value = opciones.includes(anterior) ? anterior : '';
+    }
+
+    function agruparMesas(datos) {
+      const carreras = new Map();
+      datos.forEach(mesa => {
+        if (!carreras.has(mesa.carrera)) carreras.set(mesa.carrera, new Map());
+        const turnos = carreras.get(mesa.carrera);
+        if (!turnos.has(mesa.turno)) turnos.set(mesa.turno, new Map());
+        const anios = turnos.get(mesa.turno);
+        if (!anios.has(mesa.anio)) anios.set(mesa.anio, []);
+        anios.get(mesa.anio).push(mesa);
+      });
+      return carreras;
+    }
+
+    function texto(etiqueta, contenido) {
+      const elemento = document.createElement(etiqueta);
+      elemento.textContent = contenido;
+      return elemento;
+    }
+
+    function crearTabla(anio, datos) {
+      const contenedor = document.createElement('div');
+      contenedor.className = 'tabla';
+      const tabla = document.createElement('table');
+      tabla.append(texto('caption', anio ? 'Año ' + anio : 'Año no informado'));
+      const cabecera = document.createElement('thead');
+      const filaCabecera = document.createElement('tr');
+      const columnas = [['Materia', 'materia'], ['Plan / Res.', 'plan'], ['Com.', 'comision'],
+        ['Fecha', 'fecha'], ['Hora', 'hora'], ['Titular', 'persona'], ['Vocal 1', 'persona'], ['Vocal 2', 'persona']];
+      columnas.forEach(([titulo, clase]) => {
+        const celda = texto('th', titulo);
+        celda.scope = 'col';
+        celda.className = clase;
+        filaCabecera.append(celda);
+      });
+      cabecera.append(filaCabecera);
+      tabla.append(cabecera);
+      const cuerpo = document.createElement('tbody');
+      [...datos].sort((a, b) => comparar.compare(a.fecha + a.hora, b.fecha + b.hora) ||
+        comparar.compare(a.materia, b.materia) || comparar.compare(a.comision, b.comision)).forEach(mesa => {
+        const fila = document.createElement('tr');
+        const fecha = mesa.fecha.split('-').reverse().join('/');
+        const valores = [mesa.materia, mesa.resolucion, mesa.comision, fecha, mesa.hora,
+          mesa.docente, mesa.vocal1 ?? mesa.vocal ?? '', mesa.vocal2 ?? ''];
+        valores.forEach(valor => fila.append(texto('td', valor || '—')));
+        cuerpo.append(fila);
+      });
+      tabla.append(cuerpo);
+      contenedor.append(tabla);
+      return contenedor;
+    }
+
+    function renderizar() {
+      const seleccion = mesas.filter(m => (!ui.carrera.value || m.carrera === ui.carrera.value) &&
+        (!ui.turno.value || m.turno === ui.turno.value));
+      const grupos = agruparMesas(seleccion);
+      ui.cartelera.replaceChildren();
+      let cantidadBloques = 0;
+      [...grupos.keys()].sort(comparar.compare).forEach(carrera => {
+        const turnos = grupos.get(carrera);
+        [...turnos.keys()].sort(comparar.compare).forEach(turno => {
+          const anios = turnos.get(turno);
+          [...anios.keys()].sort(comparar.compare).forEach(anio => {
+            cantidadBloques++;
+            const bloque = document.createElement('section');
+            bloque.className = 'bloque';
+            const encabezado = document.createElement('header');
+            encabezado.className = 'encabezado';
+            const logo = document.createElement('img');
+            logo.src = './logo-universitas.png';
+            logo.alt = 'Universitas';
+            const titulo = document.createElement('div');
+            titulo.append(texto('p', 'Mesas de examen'), texto('h2', carrera || 'Carrera no informada'));
+            const subtitulo = texto('p', 'Turno: ' + (turno || 'No informado'));
+            subtitulo.className = 'turno';
+            titulo.append(subtitulo);
+            encabezado.append(logo, titulo);
+            bloque.append(encabezado);
+            bloque.append(crearTabla(anio, anios.get(anio)));
+            ui.cartelera.append(bloque);
+          });
+        });
+      });
+      ui.imprimir.disabled = seleccion.length === 0;
+      ui.estado.textContent = seleccion.length
+        ? seleccion.length + ' mesas · ' + cantidadBloques + ' bloques de carrera, turno y año.'
+        : 'No hay mesas publicadas para esta selección.';
+    }
+
+    async function cargarMesas() {
+      ui.filtros.disabled = true;
+      ui.imprimir.disabled = true;
+      ui.reintentar.hidden = true;
+      ui.cartelera.replaceChildren();
+      ui.cartelera.setAttribute('aria-busy', 'true');
+      ui.estado.textContent = 'Cargando mesas…';
+      try {
+        const respuesta = await fetch('./mesas.json', { cache: 'no-cache' });
+        if (!respuesta.ok) throw new Error('No se pudo cargar el listado.');
+        const datos = await respuesta.json();
+        if (!validarMesas(datos)) throw new Error('El listado no tiene el formato esperado.');
+        mesas = datos;
+        llenarSelector(ui.carrera, mesas.map(m => m.carrera), 'Todas las carreras');
+        actualizarTurnos();
+        ui.filtros.disabled = false;
+        renderizar();
+      } catch (_) {
+        mesas = [];
+        ui.estado.textContent = 'No se pudieron cargar las mesas. Reintentá en unos momentos.';
+        ui.reintentar.hidden = false;
+      } finally {
+        ui.cartelera.setAttribute('aria-busy', 'false');
+      }
+    }
+
+    function actualizarTurnos() {
+      const seleccion = mesas.filter(m => !ui.carrera.value || m.carrera === ui.carrera.value);
+      llenarSelector(ui.turno, seleccion.map(m => m.turno), 'Todos los turnos');
+    }
+
+    ui.carrera.addEventListener('change', () => { actualizarTurnos(); renderizar(); });
+    ui.turno.addEventListener('change', renderizar);
+    ui.imprimir.addEventListener('click', () => window.print());
+    ui.reintentar.addEventListener('click', cargarMesas);
+    cargarMesas();
+  </script>
+</body>
+</html>
