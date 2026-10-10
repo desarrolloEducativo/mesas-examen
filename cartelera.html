@@ -7,33 +7,40 @@
   <title>Cartelera · Mesas de examen</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; background: #eef1f5; color: #192433; font-family: Arial, sans-serif; }
-    .herramientas { max-width: 1200px; margin: 28px auto; padding: 24px; background: white; border-radius: 12px; }
-    h1 { margin: 0 0 8px; font-size: 26px; }
-    .ayuda { color: #536174; line-height: 1.5; }
+    :root { color-scheme: light; font-family: system-ui, -apple-system, sans-serif; color: #303740; background: #f7f7f8; }
+    body { margin: 0; }
+    .header-institucional { background: white; padding: 10px 20px; border-bottom: 1px solid #dce1e6; }
+    .marca { max-width: 1080px; margin: auto; display: flex; align-items: center; justify-content: center; }
+    .logo-institucional { display: block; width: 100%; max-width: 460px; height: auto; }
+    .herramientas { max-width: 1200px; margin: 28px auto; padding: 24px; background: white; border: 1px solid #e0e3e7; border-radius: 12px; }
+    h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 5vw, 2.3rem); color: #163b59; }
+    .ayuda { color: #606975; line-height: 1.6; }
     fieldset { border: 0; padding: 0; margin: 22px 0 12px; display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
-    label { display: grid; gap: 7px; font-weight: bold; }
-    select, button { min-height: 44px; padding: 10px 14px; border: 1px solid #b7c1cd; border-radius: 6px; font: inherit; }
-    select { max-width: 100%; background: white; }
-    button { background: #173c65; color: white; cursor: pointer; }
-    button:disabled { opacity: .5; cursor: default; }
-    :focus-visible { outline: 3px solid #d68a20; outline-offset: 3px; }
-    #estado { margin-bottom: 0; }
+    label { display: grid; gap: 7px; font-size: .9rem; font-weight: 600; }
+    select, button { min-height: 46px; padding: 10px 16px; border-radius: 7px; font: inherit; }
+    select { max-width: 100%; background: white; color: inherit; border: 1px solid #c5cbd2; }
+    button { background: white; color: #163b59; border: 1px solid #8b9bac; font-weight: 600; cursor: pointer; }
+    button:hover { background: #edf3f8; }
+    :disabled { opacity: .7; cursor: wait; }
+    :focus-visible { outline: 3px solid #2676b3; outline-offset: 3px; }
+    #estado { margin-bottom: 0; color: #606975; line-height: 1.6; }
     #cartelera { max-width: 1200px; margin: 0 auto 40px; }
-    .bloque { margin-bottom: 24px; background: white; padding: 28px; }
-    .encabezado { display: flex; align-items: center; gap: 24px; border-bottom: 3px solid #192433; padding-bottom: 16px; }
+    .bloque { margin-bottom: 24px; background: white; padding: 28px; border: 1px solid #e0e3e7; border-top: 4px solid #163b59; border-radius: 10px; }
+    .encabezado { display: flex; align-items: center; gap: 24px; border-bottom: 1px solid #e5eaf0; padding-bottom: 16px; }
     .encabezado img { width: 150px; height: 70px; object-fit: contain; }
     .encabezado p { margin: 0 0 6px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-    .encabezado h2 { margin: 0 0 6px; font-size: 24px; }
+    .encabezado h2 { margin: 0 0 6px; font-size: 24px; color: #163b59; }
     .encabezado .turno { font-size: 18px; font-weight: bold; text-transform: none; letter-spacing: 0; }
     .tabla { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
-    caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: bold; }
-    th, td { border: 1px solid #88929e; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
-    th { background: #e8edf2; }
+    caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: 600; color: #163b59; }
+    th, td { border: 1px solid #c5cbd2; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
+    th { background: #edf3f8; color: #163b59; font-weight: 600; }
     .materia { width: 23%; } .plan { width: 10%; } .comision { width: 9%; }
     .fecha { width: 10%; } .hora { width: 6%; } .persona { width: 14%; }
     @media (max-width: 650px) {
+      .header-institucional { padding: 8px 16px; }
+      .logo-institucional { max-width: 280px; }
       .herramientas { margin: 12px; padding: 18px; }
       .bloque { padding: 18px; }
       fieldset, label { width: 100%; }
@@ -45,9 +52,9 @@
     @page { size: A4 landscape; margin: 12mm; }
     @media print {
       body { background: white; color: black; }
-      .herramientas { display: none; }
+      .header-institucional, .herramientas { display: none; }
       #cartelera { max-width: none; margin: 0; }
-      .bloque { margin: 0; padding: 0; break-before: page; }
+      .bloque { margin: 0; padding: 0; border: 0; border-radius: 0; break-before: page; }
       .bloque:first-child { break-before: auto; }
       .encabezado { break-inside: avoid; break-after: avoid; }
       .tabla { overflow: visible; }
@@ -57,23 +64,30 @@
       tr { break-inside: avoid; }
       th, td { padding: 2.2mm 1.7mm; font-size: 10pt; color: black; }
       th { background: white; }
-      .encabezado h2 { font-size: 19pt; }
+      .encabezado h2 { font-size: 19pt; color: black; }
+      caption { color: black; }
     }
   </style>
 </head>
 <body>
-  <header class="herramientas">
-    <h1>Cartelera de mesas de examen</h1>
+  <header class="header-institucional">
+    <div class="marca">
+      <img class="logo-institucional" src="./logo-universitas.png"
+        alt="Universitas — Nivel Superior, DIEGEP 4031" fetchpriority="high">
+    </div>
+  </header>
+  <section class="herramientas" aria-labelledby="titulo-cartelera">
+    <h1 id="titulo-cartelera">Cartelera de mesas de examen</h1>
     <p class="ayuda">Elegí qué mesas imprimir. Cada año comienza en una página nueva, con su carrera y turno en el encabezado.</p>
     <fieldset id="filtros" disabled aria-label="Selección de mesas">
       <label>Carrera<select id="carrera"><option value="">Todas las carreras</option></select></label>
       <label>Turno<select id="turno"><option value="">Todos los turnos</option></select></label>
       <button id="imprimir" type="button" disabled>Imprimir / Guardar PDF</button>
     </fieldset>
-    <p class="ayuda">Formato A4 horizontal. En el diálogo de impresión podés guardar como PDF y desactivar los encabezados y pies del navegador.</p>
+    <p class="ayuda">Formato A4 horizontal.</p>
     <p id="estado" role="status" aria-live="polite">Cargando mesas…</p>
     <button id="reintentar" type="button" hidden>Reintentar</button>
-  </header>
+  </section>
   <main id="cartelera" aria-label="Mesas para imprimir" aria-busy="true"></main>
   <script>
     const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
