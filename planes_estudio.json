@@ -1,6 +1,6 @@
 {
   "version_formato": 1,
-  "exportado_en": "2026-10-12T00:21:30.389Z",
+  "exportado_en": "2026-10-12T17:39:12.912Z",
   "incluye_inactivos": true,
   "cantidades": {
     "carreras": 14,
@@ -5755,7 +5755,7 @@
           "numero_resolucion": 5308,
           "descripcion": "",
           "activo": true,
-          "pdf": "",
+          "pdf": "https://drive.google.com/file/d/1w24T9talYlhZrdKH51veZJIhEzfG_G_o/view?usp=drive_link",
           "created_at": "2026-08-15 00:19:39.063513",
           "updated_at": "2026-08-15 00:19:39.065152",
           "carrera_id": 13,
