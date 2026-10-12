@@ -56,13 +56,15 @@
     article .comentarios-resolucion p { font-size: .8rem; line-height: 1.3; }
     .materias-plan { border-top: 1px solid #dce3eb; padding-top: 4px; margin-top: 6px; }
     .tabla { overflow-x: auto; }
-    table { border-collapse: collapse; width: 100%; font-size: .82rem; line-height: 1.25; }
-    caption { text-align: left; font-size: 1rem; font-weight: 600; color: #163b59; padding: 12px 0 5px; }
-    th, td { text-align: left; padding: 4px 7px; border-bottom: 1px solid #dce3eb; vertical-align: top; }
-    th { background: #edf3f8; color: #163b59; }
-    .separador-anio th { padding: 6px 7px; background: #f4f6f8; border-top: 2px solid #dce3eb; font-size: .9rem; }
-    td:first-child { min-width: 200px; }
-    td:last-child { min-width: 220px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; table-layout: fixed; line-height: 1.25; }
+    caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: 600; color: #163b59; }
+    th, td { border: 1px solid #c5cbd2; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
+    th { background: #edf3f8; color: #163b59; font-weight: 600; }
+    thead th:first-child { width: 35%; }
+    thead th:nth-child(2) { width: 16%; }
+    thead th:nth-child(3) { width: 12%; }
+    thead th:last-child { width: 37%; }
+    .separador-anio th { padding: 6px 7px; background: #edf3f8; border-top: 2px solid #c5cbd2; font-size: 13px; }
     ul { margin: 0; padding-left: 18px; }
     li + li { margin-top: 3px; }
     .correlativas { list-style: none; padding-left: 0; }
@@ -80,12 +82,8 @@
     #impresion article h2, #impresion .nombre-carrera { font-size: 12pt; }
     #impresion .titulo-otorgado { font-size: 10pt; }
     #impresion caption { font-size: 10pt; padding: 3mm 0 1mm; }
-    #impresion table { font-size: 8pt; table-layout: fixed; }
-    #impresion th, #impresion td { padding: 1mm; overflow-wrap: anywhere; min-width: 0; }
-    #impresion th:first-child { width: 35%; }
-    #impresion th:nth-child(2) { width: 16%; }
-    #impresion th:nth-child(3) { width: 12%; }
-    #impresion th:last-child { width: 37%; }
+    #impresion table { font-size: 8pt; table-layout: fixed; min-width: 0; }
+    #impresion th, #impresion td { padding: 1mm; font-size: 8pt; overflow-wrap: anywhere; min-width: 0; }
     #impresion .tabla { overflow: visible; }
     #impresion .comentarios-resolucion { margin: 2mm 0; padding: 2mm; }
     #impresion .materias-plan { margin-top: 2mm; padding-top: 2mm; }
@@ -105,6 +103,7 @@
       .logo { max-width: 280px; }
       .filtros, dl, .encabezado-resolucion { grid-template-columns: 1fr; }
       article, fieldset { padding: 16px; }
+      table { min-width: 650px; }
     }
   </style>
 </head>
