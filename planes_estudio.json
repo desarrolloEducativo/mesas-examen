@@ -1,12 +1,12 @@
 {
   "version_formato": 1,
-  "exportado_en": "2026-10-12T00:13:53.225Z",
+  "exportado_en": "2026-10-12T00:21:30.389Z",
   "incluye_inactivos": true,
   "cantidades": {
     "carreras": 14,
     "resoluciones": 20,
     "materias": 401,
-    "correlatividades": 21
+    "correlatividades": 22
   },
   "catalogos": {
     "periodicidad": {
@@ -6011,7 +6011,14 @@
               "created_at": "2026-08-15 00:19:39.477767",
               "updated_at": "2026-08-15 00:19:39.480239",
               "resolucion_id": 18,
-              "correlatividades": []
+              "correlatividades": [
+                {
+                  "id": 26,
+                  "tipo": "reg_cursar",
+                  "materia_id": 111,
+                  "materia_requerida_id": 104
+                }
+              ]
             },
             {
               "id": 112,
