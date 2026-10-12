@@ -17,8 +17,10 @@
     .ayuda, .muted { color: #526275; }
     .aviso-construccion { padding: 14px 16px; margin: 18px 0; border: 1px solid #e4c573; border-left: 4px solid #ba850c; border-radius: 8px; background: #fff5d8; color: #62460b; line-height: 1.5; }
     .aviso-construccion strong { display: block; margin-bottom: 4px; }
-    .comentarios-resolucion { margin: 12px 0; padding: 12px 14px; border-left: 3px solid #28618b; background: #edf3f8; border-radius: 6px; }
-    .comentarios-resolucion h3 { margin: 0 0 6px; font-size: .95rem; }
+    .comentarios-resolucion { margin: 5px 0; padding: 0; }
+    .comentarios-resolucion h3 { margin: 0 0 3px; font-size: .8rem; }
+    .comentarios-resolucion summary { cursor: pointer; color: #526275; font-size: .75rem; font-weight: 400; }
+    .comentarios-resolucion[open] summary { margin-bottom: 4px; }
     .comentarios-resolucion p { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
     fieldset, article { background: white; border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 24px 0; min-width: 0; }
     legend, label { font-weight: 600; }
@@ -30,20 +32,29 @@
     :focus-visible { outline: 3px solid #2676b3; outline-offset: 3px; }
     :disabled { opacity: .65; }
     #estado { margin: 16px 0; }
-    article { border-top: 3px solid #28618b; padding: 14px 18px; margin: 12px 0; }
+    article { border-top: 3px solid #28618b; padding: 10px 14px; margin: 10px 0; }
     article p { margin: 6px 0; font-size: .9rem; line-height: 1.4; }
-    article h2 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.6rem); font-weight: 750; line-height: 1.2; }
+    article h2 { margin: 0; font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 750; line-height: 1.2; }
     .etiqueta { display: inline-block; padding: 4px 10px; border-radius: 20px; background: #edf3f8; color: #163b59; font-size: .85rem; }
     .inactiva { background: #f3eee5; color: #705320; }
-    dl { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 10px 16px; margin: 0; }
-    .titulo-otorgado { grid-column: 1 / -1; border-top: 1px solid #dce3eb; padding-top: 10px; }
+    dl { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 5px 12px; margin: 0; }
+    .titulo-otorgado { grid-column: 1 / -1; margin-top: 2px; font-size: .9rem; line-height: 1.25; color: #163b59; }
+    .nombre-carrera { font-size: clamp(.95rem, 2vw, 1.1rem); font-weight: 750; line-height: 1.25; color: #163b59; }
+    .encabezado-resolucion { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+    .resolucion-inline { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: .95rem; font-weight: 400; color: #163b59; }
+    .estado-resolucion { margin-left: auto; align-self: center; }
+    .vigencia-inline { font-size: .75rem; font-weight: 400; color: #526275; white-space: nowrap; }
+    .pdf-icono { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #28618b; border-radius: 4px; }
+    .pdf-icono:hover { background: #edf3f8; }
+    .pdf-icono svg { width: 19px; height: 19px; }
+    .datos-numero { display: block; margin: 0; }
     .numero-resolucion { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-    dt { font-size: .8rem; font-weight: 650; color: #526275; letter-spacing: .04em; text-transform: uppercase; }
-    dd { margin: 5px 0 0; line-height: 1.4; font-size: 1rem; color: #163b59; }
-    dl > div:first-child dd { font-size: clamp(1.15rem, 2.6vw, 1.4rem); font-weight: 750; line-height: 1.3; }
-    .titulo-otorgado dd { font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 600; }
-    .pie-plan { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; margin-top: 8px; }
-    .materias-plan { border-top: 1px solid #dce3eb; padding-top: 8px; margin-top: 10px; }
+    dt { font-size: .7rem; font-weight: 650; color: #526275; letter-spacing: .03em; text-transform: uppercase; }
+    dd { margin: 2px 0 0; line-height: 1.25; font-size: .9rem; color: #163b59; }
+    dl > div:first-child dd { font-size: clamp(.95rem, 2vw, 1.1rem); font-weight: 750; line-height: 1.25; }
+    .pie-plan { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; font-size: .75rem; margin-top: 5px; }
+    article .comentarios-resolucion p { font-size: .8rem; line-height: 1.3; }
+    .materias-plan { border-top: 1px solid #dce3eb; padding-top: 4px; margin-top: 6px; }
     .tabla { overflow-x: auto; }
     table { border-collapse: collapse; width: 100%; font-size: .82rem; line-height: 1.25; }
     caption { text-align: left; font-size: 1rem; font-weight: 600; color: #163b59; padding: 12px 0 5px; }
@@ -56,7 +67,7 @@
     li + li { margin-top: 3px; }
     .correlativas { list-style: none; padding-left: 0; }
     .tipo-correlativa { display: inline-block; margin-left: 4px; padding: 0 4px; border: 1px solid #b8cbdc; border-radius: 3px; background: #edf3f8; color: #163b59; font-size: .7rem; font-weight: 700; white-space: nowrap; }
-    .leyenda-correlativas { display: block; margin-top: 3px; color: #526275; font-size: .7rem; font-weight: 400; line-height: 1.3; }
+    .leyenda-correlativas { display: block; margin-top: 3px; color: #526275; font-size: .7rem; font-weight: 400; line-height: 1.3; white-space: nowrap; }
     .aclaracion-correlativas { margin-top: 12px; padding-top: 8px; border-top: 1px solid #dce3eb; color: #526275; }
     a { color: #205f90; }
     [hidden] { display: none !important; }
@@ -66,8 +77,8 @@
     #impresion article { margin: 0; padding: 3mm; border-radius: 0; }
     #impresion article p, #impresion dd { font-size: 9pt; }
     #impresion dt { font-size: 8pt; }
-    #impresion article h2, #impresion dl > div:first-child dd { font-size: 12pt; }
-    #impresion .titulo-otorgado dd { font-size: 10pt; }
+    #impresion article h2, #impresion .nombre-carrera { font-size: 12pt; }
+    #impresion .titulo-otorgado { font-size: 10pt; }
     #impresion caption { font-size: 10pt; padding: 3mm 0 1mm; }
     #impresion table { font-size: 8pt; table-layout: fixed; }
     #impresion th, #impresion td { padding: 1mm; overflow-wrap: anywhere; min-width: 0; }
@@ -92,7 +103,7 @@
     @media (max-width: 650px) {
       main { padding: 20px 12px 32px; }
       .logo { max-width: 280px; }
-      .filtros, dl { grid-template-columns: 1fr; }
+      .filtros, dl, .encabezado-resolucion { grid-template-columns: 1fr; }
       article, fieldset { padding: 16px; }
     }
   </style>
@@ -155,7 +166,7 @@
       grupo.append(texto('dt', etiqueta), texto('dd', valor || 'No informado'));
       lista.append(grupo);
     }
-    function tablaMaterias(materias) {
+    function tablaMaterias(materias, idAclaracion) {
       const contenedor = texto('div', '', 'tabla');
       contenedor.tabIndex = 0;
       contenedor.setAttribute('role', 'region');
@@ -167,14 +178,10 @@
       ['Materia', 'Periodicidad', 'Horas totales', 'Correlativas'].forEach(nombre => {
         const celda = texto('th', nombre); celda.scope = 'col';
         if (nombre === 'Correlativas') {
-          const presentes = new Set(materias.flatMap(m => (m.correlatividades || []).map(c => c.tipo)));
-          const leyenda = texto('span', '', 'leyenda-correlativas');
-          Object.entries(etiquetasCorrelativas).forEach(([tipo, etiqueta]) => {
-            if (tipo === 'reg_cursar' || tipo === 'apr_rendir' || presentes.has(tipo)) {
-              leyenda.append(texto('span', `${etiqueta.codigo}: ${etiqueta.descripcion}`), document.createElement('br'));
-            }
-          });
-          celda.append(leyenda);
+          const enlace = texto('a', '*');
+          enlace.href = `#${idAclaracion}`;
+          enlace.setAttribute('aria-label', 'Ver aclaración de las correlativas al final');
+          celda.append(document.createTextNode(' '), enlace);
         }
         fila.append(celda);
       });
@@ -226,35 +233,40 @@
     }
     function tarjeta(carrera, resolucion) {
       const articulo = document.createElement('article');
-      const informacion = document.createElement('dl');
-      agregarDato(informacion, 'Carrera', resolucion.nombre);
-      const numero = document.createElement('div');
-      const valorNumero = texto('dd', '', 'numero-resolucion');
-      valorNumero.append(texto('h2', `${resolucion.numero_resolucion}/${resolucion.anio_resolucion}`), texto('span', resolucion.activo ? 'Activa' : 'Inactiva', resolucion.activo ? 'etiqueta' : 'etiqueta inactiva'));
-      numero.append(texto('dt', 'Resolución'), valorNumero);
-      informacion.append(numero);
-      const titulo = texto('div', '', 'titulo-otorgado');
-      titulo.append(texto('dt', 'Título otorgado'), texto('dd', resolucion.titulo_otorgado || 'No informado'));
-      informacion.append(titulo);
-      articulo.append(informacion);
-      const pie = texto('div', '', 'pie-plan');
-      pie.append(texto('span', `Vigencia desde: ${resolucion.anio_vigencia || 'No informada'}`, 'muted'));
+      const informacion = texto('div', '', 'informacion-resolucion');
+      const encabezado = texto('div', '', 'encabezado-resolucion');
+      const carreraNombre = texto('div', resolucion.nombre, 'nombre-carrera');
+      encabezado.append(carreraNombre);
+      const numero = texto('div', '', 'resolucion-inline');
+      numero.append(texto('span', `Res: ${resolucion.numero_resolucion}/${String(resolucion.anio_resolucion).slice(-2)}`));
+      encabezado.append(numero, texto('span', `Vigencia: ${resolucion.anio_vigencia || 'No informada'}`, 'vigencia-inline'));
       const pdf = urlPDF(resolucion.pdf);
       if (pdf) {
-        const enlace = texto('a', 'Ver PDF de la resolución'); enlace.href = pdf; enlace.target = '_blank'; enlace.rel = 'noopener noreferrer'; pie.append(enlace);
-      } else pie.append(texto('span', 'PDF aún no disponible.', 'muted'));
-      articulo.append(pie);
+        const enlace = texto('a', '', 'pdf-icono');
+        enlace.href = pdf; enlace.target = '_blank'; enlace.rel = 'noopener noreferrer';
+        enlace.title = 'Ver PDF de la resolución';
+        enlace.setAttribute('aria-label', 'Ver PDF de la resolución');
+        enlace.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>';
+        encabezado.append(enlace);
+      }
+      encabezado.append(texto('span', resolucion.activo ? 'Activa' : 'Inactiva', resolucion.activo ? 'etiqueta estado-resolucion' : 'etiqueta inactiva estado-resolucion'));
+      const titulo = texto('div', '', 'titulo-otorgado');
+      titulo.append(texto('strong', 'Título: '), texto('span', resolucion.titulo_otorgado || 'No informado'));
+      informacion.append(encabezado, titulo);
+      articulo.append(informacion);
       if (typeof resolucion.comentarios === 'string' && resolucion.comentarios.trim()) {
-        const comentarios = texto('section', '', 'comentarios-resolucion');
-        comentarios.append(texto('h3', 'Comentarios sobre la resolución'), texto('p', resolucion.comentarios));
+        const comentarios = texto('details', '', 'comentarios-resolucion');
+        comentarios.append(texto('summary', 'Comentarios sobre la resolución'), texto('p', resolucion.comentarios));
         articulo.append(comentarios);
       }
       const materias = resolucion.materias || [];
       if (!materias.length) articulo.append(texto('p', 'Materias aún no cargadas.', 'muted'));
       else {
         const detalle = texto('div', '', 'materias-plan');
-          detalle.append(tablaMaterias(materias));
+          const idAclaracion = `aclaracion-correlativas-${resolucion.id}`;
+          detalle.append(tablaMaterias(materias, idAclaracion));
           const aclaracion = texto('div', '', 'aclaracion-correlativas');
+          aclaracion.id = idAclaracion;
           const cursar = document.createElement('p');
           cursar.append(texto('strong', 'RC — Regularizada para cursar: '), texto('span', 'tenés que aprobar la cursada de la materia indicada como requisito para poder cursar la materia que la requiere.'));
           const rendir = document.createElement('p');
@@ -323,6 +335,7 @@
       if (!articulo || ui.imprimir.disabled) return;
       const logo = document.querySelector('header .logo').cloneNode(true);
       const copia = articulo.cloneNode(true);
+      copia.querySelectorAll('.comentarios-resolucion').forEach(comentarios => { comentarios.open = true; });
       ui.impresion.append(logo, copia);
       // Medir en el mismo ancho A4 que se usará al imprimir, con márgenes de 10 mm.
       const regla = document.createElement('div');
