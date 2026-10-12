@@ -1,6 +1,6 @@
 {
   "version_formato": 1,
-  "exportado_en": "2026-10-11T22:18:28.157023+00:00",
+  "exportado_en": "2026-10-12T00:13:53.225Z",
   "incluye_inactivos": true,
   "cantidades": {
     "carreras": 14,
@@ -6235,7 +6235,8 @@
               "resolucion_id": 18,
               "correlatividades": []
             }
-          ]
+          ],
+          "comentarios": "ver correlativas"
         }
       ]
     },
