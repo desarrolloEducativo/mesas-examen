@@ -15,6 +15,11 @@
     h2, h3 { color: #163b59; }
     p { line-height: 1.6; }
     .ayuda, .muted { color: #526275; }
+    .aviso-construccion { padding: 14px 16px; margin: 18px 0; border: 1px solid #e4c573; border-left: 4px solid #ba850c; border-radius: 8px; background: #fff5d8; color: #62460b; line-height: 1.5; }
+    .aviso-construccion strong { display: block; margin-bottom: 4px; }
+    .comentarios-resolucion { margin: 12px 0; padding: 12px 14px; border-left: 3px solid #28618b; background: #edf3f8; border-radius: 6px; }
+    .comentarios-resolucion h3 { margin: 0 0 6px; font-size: .95rem; }
+    .comentarios-resolucion p { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
     fieldset, article { background: white; border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 24px 0; min-width: 0; }
     legend, label { font-weight: 600; }
     legend { padding: 0 6px; }
@@ -27,27 +32,63 @@
     #estado { margin: 16px 0; }
     article { border-top: 3px solid #28618b; padding: 14px 18px; margin: 12px 0; }
     article p { margin: 6px 0; font-size: .9rem; line-height: 1.4; }
-    .encabezado-plan { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
-    article h2 { margin: 0; font-size: 1.1rem; }
+    article h2 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.6rem); font-weight: 750; line-height: 1.2; }
     .etiqueta { display: inline-block; padding: 4px 10px; border-radius: 20px; background: #edf3f8; color: #163b59; font-size: .85rem; }
     .inactiva { background: #f3eee5; color: #705320; }
-    dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin: 10px 0; }
-    dt { font-size: .85rem; color: #526275; }
-    dd { margin: 2px 0 0; line-height: 1.4; font-size: .9rem; }
+    dl { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 10px 16px; margin: 0; }
+    .titulo-otorgado { grid-column: 1 / -1; border-top: 1px solid #dce3eb; padding-top: 10px; }
+    .numero-resolucion { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    dt { font-size: .8rem; font-weight: 650; color: #526275; letter-spacing: .04em; text-transform: uppercase; }
+    dd { margin: 5px 0 0; line-height: 1.4; font-size: 1rem; color: #163b59; }
+    dl > div:first-child dd { font-size: clamp(1.15rem, 2.6vw, 1.4rem); font-weight: 750; line-height: 1.3; }
+    .titulo-otorgado dd { font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 600; }
     .pie-plan { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; margin-top: 8px; }
-    details { border-top: 1px solid #dce3eb; padding-top: 4px; margin-top: 8px; }
-    summary { cursor: pointer; color: #163b59; font-weight: 600; font-size: .9rem; padding: 6px 0; }
+    .materias-plan { border-top: 1px solid #dce3eb; padding-top: 8px; margin-top: 10px; }
     .tabla { overflow-x: auto; }
-    table { border-collapse: collapse; width: 100%; font-size: .9rem; }
-    caption { text-align: left; font-size: 1.15rem; font-weight: 600; color: #163b59; padding: 24px 0 12px; }
-    th, td { text-align: left; padding: 12px; border-bottom: 1px solid #dce3eb; vertical-align: top; }
+    table { border-collapse: collapse; width: 100%; font-size: .82rem; line-height: 1.25; }
+    caption { text-align: left; font-size: 1rem; font-weight: 600; color: #163b59; padding: 12px 0 5px; }
+    th, td { text-align: left; padding: 4px 7px; border-bottom: 1px solid #dce3eb; vertical-align: top; }
     th { background: #edf3f8; color: #163b59; }
+    .separador-anio th { padding: 6px 7px; background: #f4f6f8; border-top: 2px solid #dce3eb; font-size: .9rem; }
     td:first-child { min-width: 200px; }
     td:last-child { min-width: 220px; }
     ul { margin: 0; padding-left: 18px; }
-    li + li { margin-top: 8px; }
+    li + li { margin-top: 3px; }
+    .correlativas { list-style: none; padding-left: 0; }
+    .tipo-correlativa { display: inline-block; margin-left: 4px; padding: 0 4px; border: 1px solid #b8cbdc; border-radius: 3px; background: #edf3f8; color: #163b59; font-size: .7rem; font-weight: 700; white-space: nowrap; }
+    .leyenda-correlativas { display: block; margin-top: 3px; color: #526275; font-size: .7rem; font-weight: 400; line-height: 1.3; }
+    .aclaracion-correlativas { margin-top: 12px; padding-top: 8px; border-top: 1px solid #dce3eb; color: #526275; }
     a { color: #205f90; }
     [hidden] { display: none !important; }
+    .acciones { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    #impresion { position: absolute; left: -10000px; top: 0; width: 190mm; visibility: hidden; }
+    #impresion .logo { width: 65mm; margin: 0 auto 3mm; }
+    #impresion article { margin: 0; padding: 3mm; border-radius: 0; }
+    #impresion article p, #impresion dd { font-size: 9pt; }
+    #impresion dt { font-size: 8pt; }
+    #impresion article h2, #impresion dl > div:first-child dd { font-size: 12pt; }
+    #impresion .titulo-otorgado dd { font-size: 10pt; }
+    #impresion caption { font-size: 10pt; padding: 3mm 0 1mm; }
+    #impresion table { font-size: 8pt; table-layout: fixed; }
+    #impresion th, #impresion td { padding: 1mm; overflow-wrap: anywhere; min-width: 0; }
+    #impresion th:first-child { width: 35%; }
+    #impresion th:nth-child(2) { width: 16%; }
+    #impresion th:nth-child(3) { width: 12%; }
+    #impresion th:last-child { width: 37%; }
+    #impresion .tabla { overflow: visible; }
+    #impresion .comentarios-resolucion { margin: 2mm 0; padding: 2mm; }
+    #impresion .materias-plan { margin-top: 2mm; padding-top: 2mm; }
+    #impresion li + li { margin-top: 1mm; }
+    #impresion .tipo-correlativa { font-size: 7pt; padding: 0 3px; }
+    #impresion .leyenda-correlativas { font-size: 7pt; margin-top: 1mm; }
+    @page { size: A4 portrait; margin: 10mm; }
+    @media print {
+      body { background: white; }
+      body > header, body > main { display: none; }
+      #impresion { position: static; visibility: visible; color: black; }
+      #impresion article { break-inside: avoid; }
+      #impresion a { color: inherit; text-decoration: none; }
+    }
     @media (max-width: 650px) {
       main { padding: 20px 12px 32px; }
       .logo { max-width: 280px; }
@@ -61,6 +102,10 @@
   <main>
     <h1>Resoluciones y planes de estudio</h1>
     <p class="ayuda">Consultá las resoluciones de tu carrera, sus materias y las correlatividades cargadas.</p>
+    <aside class="aviso-construccion" aria-label="Aviso sobre la información del sitio">
+      <strong>Sitio en construcción</strong>
+      Faltan resoluciones por incorporar y correlatividades por verificar y agregar. La información publicada aún está incompleta.
+    </aside>
     <fieldset id="filtros" disabled>
       <legend>Buscar resoluciones</legend>
       <div class="filtros">
@@ -69,14 +114,24 @@
         <label for="estado-plan">Estado<select id="estado-plan"><option value="">Todos los estados</option><option value="activo">Activas</option><option value="inactivo">Inactivas</option></select></label>
       </div>
     </fieldset>
-    <p id="estado" role="status" aria-live="polite">Cargando resoluciones…</p>
+    <div class="acciones">
+      <p id="estado" role="status" aria-live="polite">Cargando resoluciones…</p>
+      <button id="imprimir" type="button" disabled>Imprimir resolución / Guardar PDF</button>
+    </div>
     <button id="reintentar" type="button" hidden>Reintentar</button>
     <section id="resultados" aria-label="Resoluciones"></section>
   </main>
+  <div id="impresion" aria-hidden="true"></div>
   <script>
     'use strict';
-    const ui = Object.fromEntries(['filtros', 'carrera', 'resolucion', 'estado-plan', 'estado', 'reintentar', 'resultados'].map(id => [id, document.getElementById(id)]));
+    const ui = Object.fromEntries(['filtros', 'carrera', 'resolucion', 'estado-plan', 'estado', 'reintentar', 'resultados', 'imprimir', 'impresion'].map(id => [id, document.getElementById(id)]));
     const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
+    const etiquetasCorrelativas = {
+      reg_cursar: { codigo: 'RC', descripcion: 'Regularizada para cursar' },
+      apr_rendir: { codigo: 'AR', descripcion: 'Aprobada para rendir' },
+      apr_cursar: { codigo: 'AC', descripcion: 'Aprobada para cursar' },
+      reg_rendir: { codigo: 'RR', descripcion: 'Regularizada para rendir' }
+    };
     let datos;
     let materiasPorId;
     function texto(tag, valor, clase) {
@@ -100,47 +155,87 @@
       grupo.append(texto('dt', etiqueta), texto('dd', valor || 'No informado'));
       lista.append(grupo);
     }
-    function tablaMaterias(anio, materias) {
+    function tablaMaterias(materias) {
       const contenedor = texto('div', '', 'tabla');
       contenedor.tabIndex = 0;
       contenedor.setAttribute('role', 'region');
-      contenedor.setAttribute('aria-label', anio);
+      contenedor.setAttribute('aria-label', 'Materias por año');
       const tabla = document.createElement('table');
-      tabla.append(texto('caption', anio));
+      tabla.append(texto('caption', 'Materias por año'));
       const cabecera = document.createElement('thead');
       const fila = document.createElement('tr');
-      ['Materia', 'Periodicidad', 'Horas totales', 'Correlatividades'].forEach(nombre => {
-        const celda = texto('th', nombre); celda.scope = 'col'; fila.append(celda);
+      ['Materia', 'Periodicidad', 'Horas totales', 'Correlativas'].forEach(nombre => {
+        const celda = texto('th', nombre); celda.scope = 'col';
+        if (nombre === 'Correlativas') {
+          const presentes = new Set(materias.flatMap(m => (m.correlatividades || []).map(c => c.tipo)));
+          const leyenda = texto('span', '', 'leyenda-correlativas');
+          Object.entries(etiquetasCorrelativas).forEach(([tipo, etiqueta]) => {
+            if (tipo === 'reg_cursar' || tipo === 'apr_rendir' || presentes.has(tipo)) {
+              leyenda.append(texto('span', `${etiqueta.codigo}: ${etiqueta.descripcion}`), document.createElement('br'));
+            }
+          });
+          celda.append(leyenda);
+        }
+        fila.append(celda);
       });
       cabecera.append(fila); tabla.append(cabecera);
       const cuerpo = document.createElement('tbody');
-      materias.sort((a, b) => (a.numero_orden ?? Infinity) - (b.numero_orden ?? Infinity) || comparar.compare(a.nombre, b.nombre)).forEach(materia => {
+      let ultimoAnio;
+      [...materias].sort((a, b) => comparar.compare(String(a.anio || 'z'), String(b.anio || 'z')) || (a.numero_orden ?? Infinity) - (b.numero_orden ?? Infinity) || comparar.compare(a.nombre, b.nombre)).forEach(materia => {
+        const anio = materia.anio ? `${materia.anio}° año` : 'Año no informado';
+        if (anio !== ultimoAnio) {
+          const separador = texto('tr', '', 'separador-anio');
+          const titulo = texto('th', anio);
+          titulo.colSpan = 4;
+          titulo.scope = 'rowgroup';
+          separador.append(titulo);
+          cuerpo.append(separador);
+          ultimoAnio = anio;
+        }
         const filaMateria = document.createElement('tr');
         const nombre = texto('td', materia.nombre);
         if (materia.activa === false) nombre.append(texto('p', 'Inactiva', 'muted'));
-        filaMateria.append(nombre, texto('td', datos.catalogos?.periodicidad?.[materia.periodicidad] || materia.periodicidad || 'No informada'), texto('td', materia.horas_totales ?? 'No informadas'));
+        const periodicidad = { '1c': '1C', '2c': '2C' }[materia.periodicidad] || datos.catalogos?.periodicidad?.[materia.periodicidad] || materia.periodicidad || 'No informada';
+        filaMateria.append(nombre, texto('td', periodicidad), texto('td', materia.horas_totales ?? 'No informadas'));
         const correlativas = document.createElement('td');
         if (materia.correlatividades?.length) {
-          const lista = document.createElement('ul');
+          const lista = texto('ul', '', 'correlativas');
+          const requisitos = new Map();
           materia.correlatividades.forEach(correlativa => {
-            const requerida = materiasPorId.get(String(correlativa.materia_requerida_id));
-            const tipo = datos.catalogos?.tipo_correlatividad?.[correlativa.tipo] || correlativa.tipo;
-            lista.append(texto('li', `${tipo}: ${requerida?.nombre || 'Materia no informada'}`));
+            const id = String(correlativa.materia_requerida_id);
+            if (!requisitos.has(id)) requisitos.set(id, new Set());
+            requisitos.get(id).add(correlativa.tipo);
+          });
+          requisitos.forEach((tipos, id) => {
+            const requerida = materiasPorId.get(id);
+            const item = texto('li', requerida?.nombre || 'Materia no informada');
+            [...tipos].sort((a, b) => Object.keys(etiquetasCorrelativas).indexOf(a) - Object.keys(etiquetasCorrelativas).indexOf(b)).forEach(tipo => {
+              const etiqueta = etiquetasCorrelativas[tipo] || { codigo: tipo, descripcion: datos.catalogos?.tipo_correlatividad?.[tipo] || tipo };
+              const badge = texto('span', etiqueta.codigo, 'tipo-correlativa');
+              badge.title = etiqueta.descripcion;
+              badge.setAttribute('aria-label', etiqueta.descripcion);
+              item.append(badge);
+            });
+            lista.append(item);
           });
           correlativas.append(lista);
-        } else correlativas.textContent = 'Sin correlatividades cargadas';
+        }
         filaMateria.append(correlativas); cuerpo.append(filaMateria);
       });
       tabla.append(cuerpo); contenedor.append(tabla); return contenedor;
     }
     function tarjeta(carrera, resolucion) {
       const articulo = document.createElement('article');
-      const encabezado = texto('div', '', 'encabezado-plan');
-      encabezado.append(texto('h2', `Resolución ${resolucion.numero_resolucion}/${resolucion.anio_resolucion}`), texto('span', resolucion.activo ? 'Activa' : 'Inactiva', resolucion.activo ? 'etiqueta' : 'etiqueta inactiva'));
-      articulo.append(encabezado, texto('p', carrera.nombre, 'muted'));
       const informacion = document.createElement('dl');
-      agregarDato(informacion, 'Plan de estudio', resolucion.nombre);
-      agregarDato(informacion, 'Título otorgado', resolucion.titulo_otorgado);
+      agregarDato(informacion, 'Carrera', resolucion.nombre);
+      const numero = document.createElement('div');
+      const valorNumero = texto('dd', '', 'numero-resolucion');
+      valorNumero.append(texto('h2', `${resolucion.numero_resolucion}/${resolucion.anio_resolucion}`), texto('span', resolucion.activo ? 'Activa' : 'Inactiva', resolucion.activo ? 'etiqueta' : 'etiqueta inactiva'));
+      numero.append(texto('dt', 'Resolución'), valorNumero);
+      informacion.append(numero);
+      const titulo = texto('div', '', 'titulo-otorgado');
+      titulo.append(texto('dt', 'Título otorgado'), texto('dd', resolucion.titulo_otorgado || 'No informado'));
+      informacion.append(titulo);
       articulo.append(informacion);
       const pie = texto('div', '', 'pie-plan');
       pie.append(texto('span', `Vigencia desde: ${resolucion.anio_vigencia || 'No informada'}`, 'muted'));
@@ -149,24 +244,23 @@
         const enlace = texto('a', 'Ver PDF de la resolución'); enlace.href = pdf; enlace.target = '_blank'; enlace.rel = 'noopener noreferrer'; pie.append(enlace);
       } else pie.append(texto('span', 'PDF aún no disponible.', 'muted'));
       articulo.append(pie);
+      if (typeof resolucion.comentarios === 'string' && resolucion.comentarios.trim()) {
+        const comentarios = texto('section', '', 'comentarios-resolucion');
+        comentarios.append(texto('h3', 'Comentarios sobre la resolución'), texto('p', resolucion.comentarios));
+        articulo.append(comentarios);
+      }
       const materias = resolucion.materias || [];
       if (!materias.length) articulo.append(texto('p', 'Materias aún no cargadas.', 'muted'));
       else {
-        const detalle = document.createElement('details');
-        detalle.append(texto('summary', `Ver materias y correlatividades (${materias.length} materias)`));
-        let cargado = false;
-        detalle.addEventListener('toggle', () => {
-          if (!detalle.open || cargado) return;
-          cargado = true;
-          detalle.append(texto('p', 'Las correlatividades se muestran según la información cargada del plan.', 'muted'));
-          const grupos = new Map();
-          materias.forEach(materia => {
-            const anio = materia.anio ?? '';
-            if (!grupos.has(anio)) grupos.set(anio, []);
-            grupos.get(anio).push(materia);
-          });
-          [...grupos.keys()].sort((a, b) => comparar.compare(String(a || 'z'), String(b || 'z'))).forEach(anio => detalle.append(tablaMaterias(anio ? `${anio}° año` : 'Año no informado', grupos.get(anio))));
-        });
+        const detalle = texto('div', '', 'materias-plan');
+          detalle.append(tablaMaterias(materias));
+          const aclaracion = texto('div', '', 'aclaracion-correlativas');
+          const cursar = document.createElement('p');
+          cursar.append(texto('strong', 'RC — Regularizada para cursar: '), texto('span', 'tenés que aprobar la cursada de la materia indicada como requisito para poder cursar la materia que la requiere.'));
+          const rendir = document.createElement('p');
+          rendir.append(texto('strong', 'AR — Aprobada para rendir: '), texto('span', 'tenés que aprobar el final de la materia indicada como requisito para poder rendir el final de la materia que la requiere.'));
+          aclaracion.append(cursar, rendir);
+          detalle.append(aclaracion);
         articulo.append(detalle);
       }
       return articulo;
@@ -185,6 +279,12 @@
     }
     function renderizar() {
       ui.resultados.replaceChildren();
+      ui.imprimir.disabled = true;
+      ui.impresion.replaceChildren();
+      if (!ui.resolucion.value) {
+        ui.estado.textContent = 'Seleccioná una resolución para consultar sus materias. Podés elegir primero una carrera para acotar la lista.';
+        return;
+      }
       let cantidad = 0;
       const carreras = datos.carreras.filter(c => !ui.carrera.value || String(c.id) === ui.carrera.value).sort((a, b) => comparar.compare(a.nombre, b.nombre));
       carreras.forEach(carrera => {
@@ -195,9 +295,10 @@
         });
       });
       ui.estado.textContent = cantidad ? `${cantidad} ${cantidad === 1 ? 'resolución encontrada' : 'resoluciones encontradas'}.` : 'No hay resoluciones para los filtros seleccionados.';
+      ui.imprimir.disabled = cantidad !== 1;
     }
     async function cargar() {
-      ui.filtros.disabled = true; ui.reintentar.hidden = true; ui.estado.textContent = 'Cargando resoluciones…';
+      ui.filtros.disabled = true; ui.imprimir.disabled = true; ui.reintentar.hidden = true; ui.estado.textContent = 'Cargando resoluciones…';
       try {
         const respuesta = await fetch('./planes_estudio.json', { cache: 'no-cache' });
         if (!respuesta.ok) throw new Error('No se pudo cargar el archivo');
@@ -215,6 +316,28 @@
     ui['estado-plan'].addEventListener('change', () => { actualizarResoluciones(); renderizar(); });
     ui.resolucion.addEventListener('change', renderizar);
     ui.reintentar.addEventListener('click', cargar);
+    function prepararImpresion() {
+      ui.impresion.replaceChildren();
+      ui.impresion.style.zoom = '1';
+      const articulo = ui.resultados.querySelector('article');
+      if (!articulo || ui.imprimir.disabled) return;
+      const logo = document.querySelector('header .logo').cloneNode(true);
+      const copia = articulo.cloneNode(true);
+      ui.impresion.append(logo, copia);
+      // Medir en el mismo ancho A4 que se usará al imprimir, con márgenes de 10 mm.
+      const regla = document.createElement('div');
+      regla.style.height = '277mm';
+      ui.impresion.append(regla);
+      const altoDisponible = regla.getBoundingClientRect().height;
+      regla.remove();
+      const altoContenido = ui.impresion.scrollHeight;
+      ui.impresion.style.zoom = String(Math.min(1, (altoDisponible - 4) / Math.max(1, altoContenido)));
+    }
+    ui.imprimir.addEventListener('click', () => {
+      if (!ui.imprimir.disabled) window.print();
+    });
+    window.addEventListener('beforeprint', prepararImpresion);
+    window.addEventListener('afterprint', () => ui.impresion.replaceChildren());
     cargar();
   </script>
 </body>
