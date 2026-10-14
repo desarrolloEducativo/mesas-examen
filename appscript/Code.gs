@@ -62,7 +62,7 @@ function prepararPlanes_(hojaActiva) {
   if (!archivo.content || archivo.encoding !== 'base64') throw new Error('GitHub no devolvió el contenido del JSON en el formato esperado.');
   const base = JSON.parse(Utilities.newBlob(Utilities.base64Decode(archivo.content.replace(/\s/g, ''))).getDataAsString('UTF-8'));
   const hojas = (hojaActiva ? [hojaActiva] : SpreadsheetApp.getActiveSpreadsheet().getSheets())
-    .filter(h => !['Planes', 'Instrucciones'].includes(h.getName()))
+    .filter(h => !['planes', 'instrucciones'].includes(h.getName().toLowerCase()))
     .map(h => {
       const filas = h.getDataRange().getDisplayValues();
       const tieneComentarios = String((filas[0] || [])[16] || '').trim() === 'Comentarios de la resolución';
@@ -82,12 +82,13 @@ function prepararPlanes_(hojaActiva) {
     if (ids.length !== 1) throw new Error('La pestaña activa mezcla resoluciones.');
     idResolucion = ids[0];
   }
-  const resultado = construirPlanes_(base, hojas, idResolucion);
+  const indice = SpreadsheetApp.getActiveSpreadsheet().getSheets().find(h => h.getName().toLowerCase() === 'planes');
+  const resultado = construirPlanes_(base, hojas, idResolucion, indice ? indice.getDataRange().getDisplayValues() : undefined);
   return Object.assign(resultado, { config, sha: archivo.sha, alcance: hojaActiva ? 'Resolución de la pestaña «' + hojaActiva.getName() + '»' : 'Todas las resoluciones' });
 }
 
 /** Función pura: valida toda la planilla y modifica únicamente correlativas revisadas. */
-function construirPlanes_(base, hojas, idResolucion) {
+function construirPlanes_(base, hojas, idResolucion, filasPlanes) {
   const datos = JSON.parse(JSON.stringify(base));
   if (!Array.isArray(datos.carreras)) throw new Error('El JSON base no contiene carreras.');
   const planes = new Map();
@@ -103,6 +104,29 @@ function construirPlanes_(base, hojas, idResolucion) {
   const errores = [];
   const cambios = [];
   const cambiosComentarios = [];
+  const cambiosPdf = [];
+  if (filasPlanes) {
+    const cabecera = (filasPlanes[0] || []).map(v => String(v).trim());
+    const colPdf = cabecera.indexOf('Link PDF');
+    if (colPdf >= 0) {
+      const colId = cabecera.indexOf('ID resolución');
+      if (colId < 0) throw new Error('Planes: falta la columna ID resolución para identificar cada PDF.');
+      if (cabecera.lastIndexOf('Link PDF') !== colPdf || cabecera.lastIndexOf('ID resolución') !== colId) throw new Error('Planes: hay encabezados duplicados.');
+      const vistosPdf = new Set();
+      filasPlanes.slice(1).forEach((fila, i) => {
+        const id = String(fila[colId] || '').trim();
+        const pdf = String(fila[colPdf] || '').trim();
+        if (!id && !pdf) return;
+        if (!planes.has(id)) { errores.push('Planes, fila ' + (i + 2) + ': ID resolución desconocido.'); return; }
+        if (vistosPdf.has(id)) { errores.push('Planes, fila ' + (i + 2) + ': resolución duplicada.'); return; }
+        vistosPdf.add(id);
+        if (idResolucion !== undefined && id !== String(idResolucion)) return;
+        if (pdf && !/^https:\/\/[^\s/?#]+(?:[/?#][^\s]*)?$/i.test(pdf)) { errores.push('Planes, fila ' + (i + 2) + ': Link PDF debe ser un enlace HTTPS completo.'); return; }
+        const plan = planes.get(id);
+        if (String(plan.pdf || '') !== pdf) { plan.pdf = pdf; cambiosPdf.push({ resolucion: id, nombre: plan.codigo }); }
+      });
+    }
+  }
   const comentariosVistos = new Set();
   let revisadas = 0, pendientes = 0;
   const requerido = ['ID resolución', 'ID materia', 'Código materia', 'Revisión', ...Object.keys(TIPOS_PLANES)];
@@ -188,7 +212,7 @@ function construirPlanes_(base, hojas, idResolucion) {
     });
   });
   if (errores.length) throw new Error(errores.slice(0, 25).join('\n') + (errores.length > 25 ? '\n… y ' + (errores.length - 25) + ' errores más.' : ''));
-  if (cambios.length || cambiosComentarios.length) {
+  if (cambios.length || cambiosComentarios.length || cambiosPdf.length) {
     datos.exportado_en = new Date().toISOString();
     datos.cantidades = Object.assign({}, datos.cantidades, {
       carreras: datos.carreras.length,
@@ -197,7 +221,7 @@ function construirPlanes_(base, hojas, idResolucion) {
       correlatividades: [...planes.values()].reduce((n,p) => n + p.materias.reduce((s,m) => s + (m.correlatividades || []).length, 0), 0)
     });
   }
-  return { datos, cambios, cambiosComentarios, revisadas, pendientes, json: JSON.stringify(datos, null, 2) + '\n' };
+  return { datos, cambios, cambiosComentarios, cambiosPdf, revisadas, pendientes, json: JSON.stringify(datos, null, 2) + '\n' };
 }
 
 function resolverSelecciones_(valor, plan, idMateria) {
@@ -221,7 +245,7 @@ function resolverSelecciones_(valor, plan, idMateria) {
 
 function resumenPlanes_(r) {
   return r.revisadas + ' materias revisadas, ' + r.pendientes + ' pendientes.\n' +
-    r.cambios.length + ' materias con cambios.\n' + (r.cambiosComentarios || []).length + ' resoluciones con cambios en comentarios.\n' + r.datos.cantidades.correlatividades + ' correlatividades en total.';
+    r.cambios.length + ' materias con cambios.\n' + (r.cambiosComentarios || []).length + ' resoluciones con cambios en comentarios.\n' + (r.cambiosPdf || []).length + ' resoluciones con cambios en PDF.\n' + r.datos.cantidades.correlatividades + ' correlatividades en total.';
 }
 function validarPlanes() {
   try { SpreadsheetApp.getUi().alert(resumenPlanes_(prepararPlanes_())); }
@@ -247,11 +271,12 @@ function publicarPlanesGithub(hojaActiva) {
   let mensaje;
   try {
     const r = prepararPlanes_(hojaActiva);
-    if (!r.cambios.length && !(r.cambiosComentarios || []).length) { ui.alert('No hay cambios para publicar.\n' + resumenPlanes_(r)); return; }
+    if (!r.cambios.length && !(r.cambiosComentarios || []).length && !(r.cambiosPdf || []).length) { ui.alert('No hay cambios para publicar.\n' + resumenPlanes_(r)); return; }
     const confirmacion = ui.alert('Advertencia: actualizar resoluciones en GitHub',
       r.alcance + '\n\n' + resumenPlanes_(r) + '\n\n' +
       'Se actualizarán las correlativas de las filas Revisada. Sus celdas vacías eliminan los requisitos correspondientes. Las pendientes se conservan.\n\n' +
       'También se guardarán los comentarios de cada resolución seleccionada. Dejar ese campo vacío elimina el comentario anterior.\n\n' +
+      'También se guardarán los enlaces de Link PDF en Planes. Una celda vacía elimina el enlace anterior.\n\n' +
       'Se creará un commit en ' + r.config.owner + '/' + r.config.repo + ', rama ' + r.config.branch + ', archivo ' + r.config.path + '.\n\n¿Confirmás la actualización?', ui.ButtonSet.YES_NO);
     if (confirmacion !== ui.Button.YES) return;
     // Los diálogos suspenden Apps Script y no conservan los locks.
@@ -277,7 +302,7 @@ function agregarCamposComentarios() {
     const base = JSON.parse(Utilities.newBlob(Utilities.base64Decode(archivo.content.replace(/\s/g, ''))).getDataAsString('UTF-8'));
     const planes = base.carreras.flatMap(c => c.resoluciones.map(r => ({ plan: r, hoja: c.codigo + ' ' + r.numero_resolucion + '-' + r.anio_resolucion })));
     let agregados = 0;
-    SpreadsheetApp.getActiveSpreadsheet().getSheets().filter(h => !['Planes', 'Instrucciones'].includes(h.getName())).forEach(h => {
+    SpreadsheetApp.getActiveSpreadsheet().getSheets().filter(h => !['planes', 'instrucciones'].includes(h.getName().toLowerCase())).forEach(h => {
       if (h.getRange('Q1').getDisplayValue() === 'Comentarios de la resolución') return;
       if (h.getRange('Q1:Q5').getDisplayValues().flat().some(Boolean)) throw new Error(h.getName() + ': Q1:Q5 contiene datos. No se reemplazaron.');
       const filas = h.getDataRange().getDisplayValues();

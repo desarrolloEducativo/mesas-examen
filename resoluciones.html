@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Resoluciones y planes de estudio · Universitas</title>
+  <title>Planes de estudio· Universitas</title>
   <style>
     :root { color-scheme: light; font-family: system-ui, -apple-system, sans-serif; color: #303740; background: #f7f7f8; }
     * { box-sizing: border-box; }
@@ -25,8 +25,9 @@
     fieldset, article { background: white; border: 1px solid #dce3eb; border-radius: 12px; padding: 20px; margin: 24px 0; min-width: 0; }
     legend, label { font-weight: 600; }
     legend { padding: 0 6px; }
-    .filtros { display: grid; grid-template-columns: 2fr 1.5fr 1fr; gap: 12px; }
+    .filtros { display: grid; grid-template-columns: 1.25fr 2fr 1.5fr; gap: 12px; }
     label { display: grid; gap: 7px; font-size: .9rem; }
+    .campo { display: grid; gap: 7px; font-size: .9rem; }
     select, button { font: inherit; min-height: 46px; padding: 10px 12px; border: 1px solid #b8c6d3; border-radius: 7px; background: white; color: #163b59; max-width: 100%; width: 100%; }
     button { width: auto; cursor: pointer; }
     :focus-visible { outline: 3px solid #2676b3; outline-offset: 3px; }
@@ -38,12 +39,17 @@
     .etiqueta { display: inline-block; padding: 4px 10px; border-radius: 20px; background: #edf3f8; color: #163b59; font-size: .85rem; }
     .inactiva { background: #f3eee5; color: #705320; }
     dl { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 5px 12px; margin: 0; }
-    .titulo-otorgado { grid-column: 1 / -1; margin-top: 2px; font-size: .9rem; line-height: 1.25; color: #163b59; }
-    .nombre-carrera { font-size: clamp(.95rem, 2vw, 1.1rem); font-weight: 750; line-height: 1.25; color: #163b59; }
-    .encabezado-resolucion { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
-    .resolucion-inline { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: .95rem; font-weight: 400; color: #163b59; }
-    .estado-resolucion { margin-left: auto; align-self: center; }
-    .vigencia-inline { font-size: .75rem; font-weight: 400; color: #526275; white-space: nowrap; }
+    .informacion-resolucion { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: stretch; }
+    .detalle-resolucion { min-width: 0; }
+    .titulo-otorgado { margin-top: 5px; font-size: .9rem; line-height: 1.35; color: #163b59; }
+    .nombre-carrera { font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 750; line-height: 1.3; color: #163b59; }
+    .encabezado-resolucion { display: grid; gap: 5px; }
+    .metadatos-resolucion { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 14px; color: #526275; }
+    .resolucion-inline { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: .82rem; font-weight: 600; color: #28618b; }
+    .estado-resolucion { align-self: flex-end; }
+    .acciones-estado { display: flex; min-width: 142px; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 22px; }
+    .vigencia-inline { font-size: .78rem; font-weight: 400; color: #526275; white-space: nowrap; }
+    .resumen-plan { margin: 4px 0 0; color: #526275; font-size: .82rem; }
     .pdf-icono { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #28618b; border-radius: 4px; }
     .pdf-icono:hover { background: #edf3f8; }
     .pdf-icono svg { width: 19px; height: 19px; }
@@ -59,11 +65,19 @@
     table { width: 100%; border-collapse: collapse; margin-top: 12px; table-layout: fixed; line-height: 1.25; }
     caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: 600; color: #163b59; }
     th, td { border: 1px solid #c5cbd2; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
-    th { background: #edf3f8; color: #163b59; font-weight: 600; }
-    thead th:first-child { width: 35%; }
-    thead th:nth-child(2) { width: 16%; }
-    thead th:nth-child(3) { width: 12%; }
-    thead th:last-child { width: 37%; }
+    th { background: #edf3f8; color: #163b59; font-weight: 650; }
+    thead th { padding: 10px 8px; vertical-align: middle; line-height: 1.2; overflow-wrap: normal; hyphens: none; }
+    thead th:first-child { width: 27%; }
+    thead th:nth-child(2) { width: 10%; }
+    thead th:nth-child(3) { width: 8%; }
+    thead th:nth-child(4) { width: 24%; }
+    thead th:nth-child(5) { width: 11%; }
+    thead th:nth-child(6) { width: 10%; }
+    thead th:last-child { width: 10%; }
+    th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3), th:nth-child(5), td:nth-child(5), th:nth-child(6), td:nth-child(6), th:nth-child(7), td:nth-child(7) { text-align: center; }
+    tbody tr:not(.separador-anio):nth-child(odd) { background: #fafcfd; }
+    tbody tr:not(.separador-anio):hover { background: #f3f7fa; }
+    .dato-pendiente { color: #6b7280; font-size: .75rem; }
     .separador-anio th { padding: 6px 7px; background: #edf3f8; border-top: 2px solid #c5cbd2; font-size: 13px; }
     ul { margin: 0; padding-left: 18px; }
     li + li { margin-top: 3px; }
@@ -74,6 +88,9 @@
     a { color: #205f90; }
     [hidden] { display: none !important; }
     .acciones { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .boton-secundario { min-height: 28px; padding: 4px 8px; border-color: #dce3eb; background: transparent; color: #526275; font-size: .75rem; border-radius: 5px; }
+    .boton-secundario:hover { background: #f5f7f9; color: #163b59; }
+    .boton-secundario:disabled { display: none; }
     #impresion { position: absolute; left: -10000px; top: 0; width: 190mm; visibility: hidden; }
     #impresion .logo { width: 65mm; margin: 0 auto 3mm; }
     #impresion article { margin: 0; padding: 3mm; border-radius: 0; }
@@ -90,6 +107,7 @@
     #impresion li + li { margin-top: 1mm; }
     #impresion .tipo-correlativa { font-size: 7pt; padding: 0 3px; }
     #impresion .leyenda-correlativas { font-size: 7pt; margin-top: 1mm; }
+    #impresion .boton-secundario { display: none; }
     @page { size: A4 portrait; margin: 10mm; }
     @media print {
       body { background: white; }
@@ -101,40 +119,37 @@
     @media (max-width: 650px) {
       main { padding: 20px 12px 32px; }
       .logo { max-width: 280px; }
-      .filtros, dl, .encabezado-resolucion { grid-template-columns: 1fr; }
+      .filtros, dl { grid-template-columns: 1fr; }
+      .informacion-resolucion { grid-template-columns: 1fr; gap: 14px; }
+      .acciones-estado { min-width: 0; flex-direction: row; align-items: center; justify-content: space-between; }
+      .estado-resolucion { align-self: center; }
       article, fieldset { padding: 16px; }
-      table { min-width: 650px; }
+      table { min-width: 900px; }
     }
   </style>
 </head>
 <body>
   <header><img class="logo" src="./logo-universitas.png" alt="Universitas — Nivel Superior, DIEGEP 4031" fetchpriority="high"></header>
   <main>
-    <h1>Resoluciones y planes de estudio</h1>
-    <p class="ayuda">Consultá las resoluciones de tu carrera, sus materias y las correlatividades cargadas.</p>
-    <aside class="aviso-construccion" aria-label="Aviso sobre la información del sitio">
-      <strong>Sitio en construcción</strong>
-      Faltan resoluciones por incorporar y correlatividades por verificar y agregar. La información publicada aún está incompleta.
-    </aside>
+    <h1>Planes de estudio</h1>
+    <p class="ayuda">Consultá los planesde estudio, sus materias, correlatividades y condiciones de aprobación/acreditación.</p>
     <fieldset id="filtros" disabled>
       <legend>Buscar resoluciones</legend>
       <div class="filtros">
-        <label for="carrera">Carrera<select id="carrera"><option value="">Todas las carreras</option></select></label>
+        <label for="facultad">Facultad<select id="facultad"><option value="">Todas las facultades</option></select></label>
+        <label for="nombre-corto">Carrera<select id="nombre-corto"><option value="">Todas las carreras</option></select></label>
         <label for="resolucion">Resolución<select id="resolucion"><option value="">Todas las resoluciones</option></select></label>
-        <label for="estado-plan">Estado<select id="estado-plan"><option value="">Todos los estados</option><option value="activo">Activas</option><option value="inactivo">Inactivas</option></select></label>
       </div>
     </fieldset>
-    <div class="acciones">
-      <p id="estado" role="status" aria-live="polite">Cargando resoluciones…</p>
-      <button id="imprimir" type="button" disabled>Imprimir resolución / Guardar PDF</button>
-    </div>
+    <p id="estado" role="status" aria-live="polite" hidden>Cargando resoluciones…</p>
     <button id="reintentar" type="button" hidden>Reintentar</button>
     <section id="resultados" aria-label="Resoluciones"></section>
+    <div hidden><button id="imprimir" class="boton-secundario" type="button" disabled>Imprimir / Guardar PDF</button></div>
   </main>
   <div id="impresion" aria-hidden="true"></div>
   <script>
     'use strict';
-    const ui = Object.fromEntries(['filtros', 'carrera', 'resolucion', 'estado-plan', 'estado', 'reintentar', 'resultados', 'imprimir', 'impresion'].map(id => [id, document.getElementById(id)]));
+    const ui = Object.fromEntries(['filtros', 'facultad', 'nombre-corto', 'resolucion', 'estado', 'reintentar', 'resultados', 'imprimir', 'impresion'].map(id => [id, document.getElementById(id)]));
     const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
     const etiquetasCorrelativas = {
       reg_cursar: { codigo: 'RC', descripcion: 'Regularizada para cursar' },
@@ -144,6 +159,11 @@
     };
     let datos;
     let materiasPorId;
+    const nombreCorto = carrera => String(carrera.nombre_corto || carrera.nombre || 'No informado').trim();
+    const facultadCarrera = carrera => String(carrera.facultad || 'No informada').trim();
+    const claveNombreCorto = carrera => nombreCorto(carrera).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es');
+    const coincideFacultad = carrera => !ui.facultad.value || facultadCarrera(carrera) === ui.facultad.value;
+    const coincideNombreCorto = carrera => !ui['nombre-corto'].value || claveNombreCorto(carrera) === ui['nombre-corto'].value;
     function texto(tag, valor, clase) {
       const elemento = document.createElement(tag);
       elemento.textContent = valor;
@@ -154,6 +174,7 @@
     function urlPDF(ruta) {
       if (typeof ruta !== 'string' || !ruta.trim()) return null;
       const valor = ruta.trim();
+      if (/^[^\\/]+\.pdf$/i.test(valor)) return new URL('./pdf%20resoluciones/' + encodeURIComponent(valor), location.href).href;
       if (valor.startsWith('https://')) {
         try { return new URL(valor).href; } catch { return null; }
       }
@@ -166,6 +187,7 @@
       lista.append(grupo);
     }
     function tablaMaterias(materias, idAclaracion) {
+      materiasPorId = new Map(materias.map(m => [String(m.id), m]));
       const contenedor = texto('div', '', 'tabla');
       contenedor.tabIndex = 0;
       contenedor.setAttribute('role', 'region');
@@ -174,7 +196,7 @@
       tabla.append(texto('caption', 'Materias por año'));
       const cabecera = document.createElement('thead');
       const fila = document.createElement('tr');
-      ['Materia', 'Periodicidad', 'Horas totales', 'Correlativas'].forEach(nombre => {
+      ['Materia', 'Modalidad', 'Horas totales', 'Correlativas', 'Nota mínima de cursada', 'Asistencia', 'Acreditación'].forEach(nombre => {
         const celda = texto('th', nombre); celda.scope = 'col';
         if (nombre === 'Correlativas') {
           const enlace = texto('a', '*');
@@ -192,7 +214,7 @@
         if (anio !== ultimoAnio) {
           const separador = texto('tr', '', 'separador-anio');
           const titulo = texto('th', anio);
-          titulo.colSpan = 4;
+          titulo.colSpan = 7;
           titulo.scope = 'rowgroup';
           separador.append(titulo);
           cuerpo.append(separador);
@@ -202,19 +224,28 @@
         const nombre = texto('td', materia.nombre);
         if (materia.activa === false) nombre.append(texto('p', 'Inactiva', 'muted'));
         const periodicidad = { '1c': '1C', '2c': '2C' }[materia.periodicidad] || datos.catalogos?.periodicidad?.[materia.periodicidad] || materia.periodicidad || 'No informada';
-        filaMateria.append(nombre, texto('td', periodicidad), texto('td', materia.horas_totales ?? 'No informadas'));
+        const promocion = materia.promocion_directa === true ? 'Promoción directa' : materia.promocion_directa === false ? 'Con examen final' : 'Definición institucional';
+        const celdaPromocion = texto('td', promocion, materia.promocion_directa == null ? 'dato-pendiente' : '');
+        filaMateria.append(
+          nombre,
+          texto('td', periodicidad),
+          texto('td', materia.horas_totales ?? '—'),
+          texto('td', materia.nota_aprobacion_cursada ?? '—'),
+          texto('td', materia.asistencia_minima_porcentaje == null ? '—' : `${materia.asistencia_minima_porcentaje}%`),
+          celdaPromocion
+        );
         const correlativas = document.createElement('td');
         if (materia.correlatividades?.length) {
           const lista = texto('ul', '', 'correlativas');
           const requisitos = new Map();
           materia.correlatividades.forEach(correlativa => {
-            const id = String(correlativa.materia_requerida_id);
+            const id = correlativa.materia_requerida_id == null ? `nombre:${correlativa.materia_requerida_nombre || 'No informada'}` : String(correlativa.materia_requerida_id);
             if (!requisitos.has(id)) requisitos.set(id, new Set());
             requisitos.get(id).add(correlativa.tipo);
           });
           requisitos.forEach((tipos, id) => {
             const requerida = materiasPorId.get(id);
-            const item = texto('li', requerida?.nombre || 'Materia no informada');
+            const item = texto('li', requerida?.nombre || (id.startsWith('nombre:') ? `${id.slice(7)} (fuera de esta variante)` : 'Materia no informada'));
             [...tipos].sort((a, b) => Object.keys(etiquetasCorrelativas).indexOf(a) - Object.keys(etiquetasCorrelativas).indexOf(b)).forEach(tipo => {
               const etiqueta = etiquetasCorrelativas[tipo] || { codigo: tipo, descripcion: datos.catalogos?.tipo_correlatividad?.[tipo] || tipo };
               const badge = texto('span', etiqueta.codigo, 'tipo-correlativa');
@@ -226,7 +257,7 @@
           });
           correlativas.append(lista);
         }
-        filaMateria.append(correlativas); cuerpo.append(filaMateria);
+        filaMateria.insertBefore(correlativas, filaMateria.children[3]); cuerpo.append(filaMateria);
       });
       tabla.append(cuerpo); contenedor.append(tabla); return contenedor;
     }
@@ -234,25 +265,47 @@
       const articulo = document.createElement('article');
       const informacion = texto('div', '', 'informacion-resolucion');
       const encabezado = texto('div', '', 'encabezado-resolucion');
-      const carreraNombre = texto('div', resolucion.nombre, 'nombre-carrera');
+      const carreraNombre = texto('div', resolucion.nombre + (resolucion.variante ? ` · ${resolucion.variante}` : ''), 'nombre-carrera');
       encabezado.append(carreraNombre);
+      const titulo = texto('div', '', 'titulo-otorgado');
+      titulo.append(texto('strong', 'Título: '), texto('span', resolucion.titulo_otorgado || 'No informado'));
+      encabezado.append(titulo);
+      const metadatos = texto('div', '', 'metadatos-resolucion');
       const numero = texto('div', '', 'resolucion-inline');
       numero.append(texto('span', `Res: ${resolucion.numero_resolucion}/${String(resolucion.anio_resolucion).slice(-2)}`));
-      encabezado.append(numero, texto('span', `Vigencia: ${resolucion.anio_vigencia || 'No informada'}`, 'vigencia-inline'));
-      const pdf = urlPDF(resolucion.pdf);
+      const fuente = datos.fuentes?.find(f => String(f.id) === String(resolucion.fuente_id ?? carrera.fuente_id));
+      const pdf = urlPDF(resolucion.pdf || fuente?.archivo);
       if (pdf) {
         const enlace = texto('a', '', 'pdf-icono');
         enlace.href = pdf; enlace.target = '_blank'; enlace.rel = 'noopener noreferrer';
         enlace.title = 'Ver PDF de la resolución';
         enlace.setAttribute('aria-label', 'Ver PDF de la resolución');
         enlace.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>';
-        encabezado.append(enlace);
+        numero.append(enlace);
       }
-      encabezado.append(texto('span', resolucion.activo ? 'Activa' : 'Inactiva', resolucion.activo ? 'etiqueta estado-resolucion' : 'etiqueta inactiva estado-resolucion'));
-      const titulo = texto('div', '', 'titulo-otorgado');
-      titulo.append(texto('strong', 'Título: '), texto('span', resolucion.titulo_otorgado || 'No informado'));
-      informacion.append(encabezado, titulo);
+      metadatos.append(numero);
+      encabezado.append(metadatos);
+      const accionesEstado = texto('div', '', 'acciones-estado');
+      accionesEstado.append(
+        texto('span', resolucion.activo === true ? 'Activa' : resolucion.activo === false ? 'Inactiva' : 'Estado no informado', resolucion.activo ? 'etiqueta estado-resolucion' : 'etiqueta inactiva estado-resolucion'),
+        ui.imprimir
+      );
+      const detalle = texto('div', '', 'detalle-resolucion');
+      detalle.append(encabezado, texto('p', 'Duración: ' + (carrera.duracion_anios ?? 'No informada') + ' años · Horas totales: ' + (resolucion.horas_totales ?? 'No informadas'), 'resumen-plan'));
+      informacion.append(detalle, accionesEstado);
       articulo.append(informacion);
+      if (fuente) {
+        const detalleFuente = texto('details', '', 'comentarios-resolucion');
+        detalleFuente.hidden = true;
+        detalleFuente.append(texto('summary', 'Fuente, notas de extracción e inconsistencias'));
+        detalleFuente.append(texto('p', fuente.archivo));
+        if (fuente.paginas_pdf?.length) detalleFuente.append(texto('p', 'Páginas PDF: ' + fuente.paginas_pdf.join(', ')));
+        const notas = document.createElement('ul');
+        (fuente.notas_extraccion || []).forEach(n => notas.append(texto('li', typeof n === 'string' ? n : JSON.stringify(n))));
+        detalleFuente.append(notas);
+        (fuente.inconsistencias || []).forEach(n => detalleFuente.append(texto('p', typeof n === 'string' ? n : JSON.stringify(n, null, 2))));
+        articulo.append(detalleFuente);
+      }
       if (typeof resolucion.comentarios === 'string' && resolucion.comentarios.trim()) {
         const comentarios = texto('details', '', 'comentarios-resolucion');
         comentarios.append(texto('summary', 'Comentarios sobre la resolución'), texto('p', resolucion.comentarios));
@@ -267,23 +320,34 @@
           const aclaracion = texto('div', '', 'aclaracion-correlativas');
           aclaracion.id = idAclaracion;
           const cursar = document.createElement('p');
-          cursar.append(texto('strong', 'RC — Regularizada para cursar: '), texto('span', 'tenés que aprobar la cursada de la materia indicada como requisito para poder cursar la materia que la requiere.'));
+          cursar.append(texto('strong', 'RC -> Regularizada para cursar: '), document.createTextNode('tenés que aprobar la '), texto('strong', 'cursada'), document.createTextNode(' de la materia indicada como requisito para poder '), texto('strong', 'cursar'), document.createTextNode(' la materia que la requiere.'));
           const rendir = document.createElement('p');
-          rendir.append(texto('strong', 'AR — Aprobada para rendir: '), texto('span', 'tenés que aprobar el final de la materia indicada como requisito para poder rendir el final de la materia que la requiere.'));
+          rendir.append(texto('strong', 'AR -> Aprobada para rendir: '), document.createTextNode('tenés que aprobar el '), texto('strong', 'final'), document.createTextNode(' de la materia indicada como requisito para poder rendir el '), texto('strong', 'final'), document.createTextNode(' de la materia que la requiere.'));
           aclaracion.append(cursar, rendir);
           detalle.append(aclaracion);
         articulo.append(detalle);
       }
       return articulo;
     }
+    function actualizarCarreras() {
+      const seleccion = ui['nombre-corto'].value;
+      ui['nombre-corto'].replaceChildren(new Option('Todas las carreras', ''));
+      const nombres = new Map();
+      datos.carreras.filter(coincideFacultad).forEach(carrera => {
+        const clave = claveNombreCorto(carrera);
+        if (!nombres.has(clave)) nombres.set(clave, nombreCorto(carrera));
+      });
+      [...nombres].sort((a, b) => comparar.compare(a[1], b[1])).forEach(([clave, nombre]) => ui['nombre-corto'].add(new Option(nombre, clave)));
+      ui['nombre-corto'].value = nombres.has(seleccion) ? seleccion : '';
+    }
     function actualizarResoluciones() {
       const seleccion = ui.resolucion.value;
       ui.resolucion.replaceChildren(new Option('Todas las resoluciones', ''));
-      const opciones = datos.carreras.filter(c => !ui.carrera.value || String(c.id) === ui.carrera.value)
-        .flatMap(c => c.resoluciones.filter(r => !ui['estado-plan'].value || Boolean(r.activo) === (ui['estado-plan'].value === 'activo')).map(r => ({ carrera: c, resolucion: r })))
+      const opciones = datos.carreras.filter(c => coincideFacultad(c) && coincideNombreCorto(c))
+        .flatMap(c => c.resoluciones.map(r => ({ carrera: c, resolucion: r })))
         .sort((a, b) => b.resolucion.anio_resolucion - a.resolucion.anio_resolucion || comparar.compare(a.resolucion.codigo, b.resolucion.codigo));
       opciones.forEach(({ carrera, resolucion }) => {
-        const etiqueta = `${resolucion.numero_resolucion}/${resolucion.anio_resolucion}${ui.carrera.value ? '' : ` · ${carrera.nombre}`}`;
+        const etiqueta = `${resolucion.numero_resolucion}/${resolucion.anio_resolucion}${resolucion.variante ? ` · ${resolucion.variante}` : ''}${ui['nombre-corto'].value ? '' : ` · ${nombreCorto(carrera)}`}`;
         ui.resolucion.add(new Option(etiqueta, String(resolucion.id)));
       });
       ui.resolucion.value = opciones.some(({ resolucion }) => String(resolucion.id) === seleccion) ? seleccion : '';
@@ -297,10 +361,9 @@
         return;
       }
       let cantidad = 0;
-      const carreras = datos.carreras.filter(c => !ui.carrera.value || String(c.id) === ui.carrera.value).sort((a, b) => comparar.compare(a.nombre, b.nombre));
+      const carreras = datos.carreras.filter(c => coincideFacultad(c) && coincideNombreCorto(c)).sort((a, b) => comparar.compare(nombreCorto(a), nombreCorto(b)));
       carreras.forEach(carrera => {
         [...carrera.resoluciones].sort((a, b) => b.anio_resolucion - a.anio_resolucion || comparar.compare(a.codigo, b.codigo)).forEach(resolucion => {
-          if (ui['estado-plan'].value && Boolean(resolucion.activo) !== (ui['estado-plan'].value === 'activo')) return;
           if (ui.resolucion.value && String(resolucion.id) !== ui.resolucion.value) return;
           ui.resultados.append(tarjeta(carrera, resolucion)); cantidad++;
         });
@@ -308,23 +371,27 @@
       ui.estado.textContent = cantidad ? `${cantidad} ${cantidad === 1 ? 'resolución encontrada' : 'resoluciones encontradas'}.` : 'No hay resoluciones para los filtros seleccionados.';
       ui.imprimir.disabled = cantidad !== 1;
     }
+    function inicializar() {
+        if (!Array.isArray(datos.carreras) || datos.carreras.some(c => !Array.isArray(c.resoluciones))) throw new Error('Formato inválido');
+        materiasPorId = new Map(datos.carreras.flatMap(c => c.resoluciones.flatMap(r => r.materias || [])).map(m => [String(m.id), m]));
+        ui.facultad.replaceChildren(new Option('Todas las facultades', ''));
+        [...new Set(datos.carreras.map(facultadCarrera))].sort(comparar.compare).forEach(nombre => ui.facultad.add(new Option(nombre, nombre)));
+        actualizarCarreras();
+        actualizarResoluciones(); renderizar(); ui.filtros.disabled = false;
+    }
     async function cargar() {
       ui.filtros.disabled = true; ui.imprimir.disabled = true; ui.reintentar.hidden = true; ui.estado.textContent = 'Cargando resoluciones…';
       try {
-        const respuesta = await fetch('./planes_estudio.json', { cache: 'no-cache' });
+        const respuesta = await fetch('./planes_estudio_extraidos.json', { cache: 'no-cache' });
         if (!respuesta.ok) throw new Error('No se pudo cargar el archivo');
         datos = await respuesta.json();
-        if (!Array.isArray(datos.carreras) || datos.carreras.some(c => !Array.isArray(c.resoluciones))) throw new Error('Formato inválido');
-        materiasPorId = new Map(datos.carreras.flatMap(c => c.resoluciones.flatMap(r => r.materias || [])).map(m => [String(m.id), m]));
-        ui.carrera.replaceChildren(new Option('Todas las carreras', ''));
-        [...datos.carreras].sort((a, b) => comparar.compare(a.nombre, b.nombre)).forEach(c => ui.carrera.add(new Option(c.nombre, String(c.id))));
-        actualizarResoluciones(); renderizar(); ui.filtros.disabled = false;
+        inicializar();
       } catch {
-        ui.resultados.replaceChildren(); ui.estado.textContent = 'No se pudieron cargar las resoluciones. Intentá nuevamente.'; ui.reintentar.hidden = false;
+        ui.resultados.replaceChildren(); ui.estado.textContent = 'No se pudo cargar el JSON automáticamente.'; ui.reintentar.hidden = false;
       }
     }
-    ui.carrera.addEventListener('change', () => { actualizarResoluciones(); renderizar(); });
-    ui['estado-plan'].addEventListener('change', () => { actualizarResoluciones(); renderizar(); });
+    ui['nombre-corto'].addEventListener('change', () => { actualizarResoluciones(); renderizar(); });
+    ui.facultad.addEventListener('change', () => { actualizarCarreras(); actualizarResoluciones(); renderizar(); });
     ui.resolucion.addEventListener('change', renderizar);
     ui.reintentar.addEventListener('click', cargar);
     function prepararImpresion() {
@@ -354,3 +421,4 @@
   </script>
 </body>
 </html>
+

@@ -1,6 +1,6 @@
 # Publicar correlatividades desde Google Sheets
 
-El script reúne las hojas de resolución y actualiza un único `planes_estudio.json`. Usa el JSON de GitHub como base para conservar carreras, títulos, horas, PDFs y demás campos que no se editan en la planilla.
+El script reúne las hojas de resolución y actualiza un único `planes_estudio.json`. Usa el JSON de GitHub como base para conservar carreras, títulos, horas y demás campos que no se editan en la planilla. Los enlaces PDF se editan en la hoja Planes.
 
 ## Instalación
 
@@ -12,6 +12,8 @@ El script reúne las hojas de resolución y actualiza un único `planes_estudio.
 
 ## Uso
 
+- En la hoja **Planes**, agregá una columna **Link PDF** y pegá el enlace completo de Drive como texto (por ejemplo, `https://drive.google.com/file/d/ID/view`). Cada fila debe tener su **ID resolución**, el mismo que aparece en la hoja de materias. El script guarda el enlace en el campo `pdf`, independientemente de la revisión de materias. Vaciar la celda elimina el enlace; si la columna no existe o el plan no tiene fila en el índice, conserva el PDF publicado. Al actualizar la pestaña activa solo aplica el enlace de esa resolución. La página ya muestra estos enlaces. En Drive, compartí el archivo con los permisos necesarios para que los visitantes puedan abrirlo.
+
 - **Comentarios de la resolución** se edita en **Q2** de cada hoja y se guarda como `comentarios` dentro de la resolución del JSON. Se actualiza independientemente de Revisión de las materias. Un campo vacío elimina el comentario anterior. La ausencia del campo en una planilla antigua conserva lo publicado.
 - Si ya completaste datos en Google Sheets, pegá el script nuevo y ejecutá **Planes de estudio → Agregar campo de comentarios a las hojas**. Agrega el campo sin reemplazar las materias ni las correlatividades editadas. Q5 identifica el plan; no lo cambies. También permite publicar comentarios de una resolución sin materias.
 
@@ -22,7 +24,7 @@ El script reúne las hojas de resolución y actualiza un único `planes_estudio.
 - **Actualizar resolución de la pestaña activa** valida y actualiza solo ese plan. Las demás resoluciones conservan sus datos de GitHub. No puede ejecutarse desde `Planes` ni `Instrucciones`. Una resolución sin materias requiere el campo de comentarios y su ID en Q5.
 - Ambas opciones muestran una advertencia con el alcance, el resumen de cambios y el destino de GitHub. Solo crean el commit al elegir **Sí**. **No** o cerrar el cartel cancela la publicación. Si no hay cambios o falla la validación, no se publica.
 
-Todas las materias del JSON base deben seguir presentes una sola vez, con sus ID originales. El script bloquea datos desconocidos, materias duplicadas, mezclas de resoluciones, autorreferencias y requisitos de otro plan. Las hojas `Planes` e `Instrucciones` se omiten; las hojas vacías de resolución se conservan como tales. El script no crea materias nuevas ni modifica metadatos de planes. Si el catálogo base cambia, hay que actualizar la planilla antes de publicar.
+Todas las materias del JSON base deben seguir presentes una sola vez, con sus ID originales. El script bloquea datos desconocidos, materias duplicadas, mezclas de resoluciones, autorreferencias y requisitos de otro plan. La hoja `Planes` aporta los enlaces PDF e `Instrucciones` se omite; las hojas vacías de resolución se conservan como tales. El script no crea materias nuevas. Si el catálogo base cambia, hay que actualizar la planilla antes de publicar.
 
 ## Consumo desde el HTML
 
