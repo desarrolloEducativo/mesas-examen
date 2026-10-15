@@ -167,6 +167,16 @@
       justify-content: space-between;
     }
 
+    .cabecera-mesa {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cabecera-mesa h2 { flex: 1; min-width: 0; }
+    .turno-mesa { flex-shrink: 0; white-space: nowrap; }
+
     .mesa h2 {
       font-size: 1.15rem;
       margin: 0 0 6px;
@@ -195,16 +205,28 @@
       border-top: 1px solid #e5eaf0;
     }
 
+    .fecha-hora {
+      display: flex;
+      align-items: baseline;
+      gap: 6px 16px;
+      flex-wrap: wrap;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+
     .fecha {
+      font-size: 1rem;
       font-weight: 600;
+      letter-spacing: -.015em;
       color: #203044;
     }
 
     .hora {
-      font-size: 1.4rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 750;
+      letter-spacing: -.02em;
+      white-space: nowrap;
       color: #163b59;
-      margin-top: 2px !important;
     }
 
     .badges {
@@ -643,7 +665,16 @@ input {
 
         const h2 = document.createElement('h2');
         h2.textContent = mesa.materia;
-        encab.append(h2);
+        const cabecera = document.createElement('div');
+        cabecera.className = 'cabecera-mesa';
+        cabecera.append(h2);
+        if (mesa.turno && mesa.turno.trim()) {
+          const turno = document.createElement('span');
+          turno.className = 'badge turno-mesa';
+          turno.textContent = 'Turno ' + mesa.turno.trim();
+          cabecera.append(turno);
+        }
+        encab.append(cabecera);
 
         const carrera = document.createElement('p');
         carrera.className = 'carrera';
@@ -676,6 +707,10 @@ input {
         const bloqueHorario = document.createElement('div');
         bloqueHorario.className = 'bloque-horario';
 
+        const fechaHora = document.createElement('div');
+        fechaHora.className = 'fecha-hora';
+        bloqueHorario.append(fechaHora);
+
         const fecha = document.createElement('p');
         fecha.className = 'fecha';
 
@@ -686,25 +721,21 @@ input {
           formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
 
         fecha.append(tiempo);
-        bloqueHorario.append(fecha);
+        fechaHora.append(fecha);
 
         const hora = document.createElement('p');
         hora.className = 'hora';
         hora.textContent = mesa.hora + ' hs';
-        bloqueHorario.append(hora);
+        fechaHora.append(hora);
 
         const grupos = [];
-
-        if (mesa.turno) {
-          grupos.push('Turno ' + mesa.turno);
-        }
 
         if (mesa.comision) {
           grupos.push('Comisión ' + mesa.comision);
         }
 
-        grupos.push('Sede: ' + (mesa.sede || 'A confirmar'));
-        grupos.push('Aula: ' + (mesa.aula || 'A confirmar'));
+        if (mesa.sede && mesa.sede.trim()) grupos.push('Sede: ' + mesa.sede.trim());
+        if (mesa.aula && mesa.aula.trim()) grupos.push('Aula: ' + mesa.aula.trim());
 
         if (grupos.length) {
           const badges = document.createElement('div');
