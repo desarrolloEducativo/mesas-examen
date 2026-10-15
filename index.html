@@ -703,6 +703,9 @@ input {
           grupos.push('Comisión ' + mesa.comision);
         }
 
+        grupos.push('Sede: ' + (mesa.sede || 'A confirmar'));
+        grupos.push('Aula: ' + (mesa.aula || 'A confirmar'));
+
         if (grupos.length) {
           const badges = document.createElement('div');
           badges.className = 'badges';

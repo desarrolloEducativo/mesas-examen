@@ -36,8 +36,8 @@
     caption { text-align: left; padding: 0 0 9px; font-size: 20px; font-weight: 600; color: #163b59; }
     th, td { border: 1px solid #c5cbd2; padding: 9px 7px; text-align: left; vertical-align: top; font-size: 13px; overflow-wrap: anywhere; }
     th { background: #edf3f8; color: #163b59; font-weight: 600; }
-    .materia { width: 23%; } .plan { width: 10%; } .comision { width: 9%; }
-    .fecha { width: 10%; } .hora { width: 6%; } .persona { width: 14%; }
+    .materia { width: 21%; } .plan { width: 8%; } .comision { width: 6%; }
+    .fecha { width: 9%; } .hora { width: 6%; } .sede { width: 10%; } .aula { width: 7%; } .persona { width: 11%; }
     @media (max-width: 650px) {
       .header-institucional { padding: 8px 16px; }
       .logo-institucional { max-width: 280px; }
@@ -142,7 +142,7 @@
       const cabecera = document.createElement('thead');
       const filaCabecera = document.createElement('tr');
       const columnas = [['Materia', 'materia'], ['Resolución', 'plan'], ['Comisión', 'comision'],
-        ['Fecha', 'fecha'], ['Hora', 'hora'], ['Titular', 'persona'], ['Vocal 1', 'persona'], ['Vocal 2', 'persona']];
+        ['Fecha', 'fecha'], ['Hora', 'hora'], ['Sede', 'sede'], ['Aula', 'aula'], ['Titular', 'persona'], ['Vocal 1', 'persona'], ['Vocal 2', 'persona']];
       columnas.forEach(([titulo, clase]) => {
         const celda = texto('th', titulo);
         celda.scope = 'col';
@@ -157,6 +157,7 @@
         const fila = document.createElement('tr');
         const fecha = mesa.fecha.split('-').reverse().join('/');
         const valores = [mesa.materia, mesa.resolucion, mesa.comision, fecha, mesa.hora,
+          mesa.sede || 'A confirmar', mesa.aula || 'A confirmar',
           mesa.docente, mesa.vocal1 ?? mesa.vocal ?? '', mesa.vocal2 ?? ''];
         valores.forEach(valor => fila.append(texto('td', valor || '—')));
         cuerpo.append(fila);
