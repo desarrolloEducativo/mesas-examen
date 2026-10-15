@@ -15224,8 +15224,8 @@
               "campo_formativo": "Definición Institucional",
               "correlatividades": [],
               "nota_aprobacion_cursada": 4,
-              "asistencia_minima_porcentaje": 60,
-              "promocion_directa": null,
+              "asistencia_minima_porcentaje": 80,
+              "promocion_directa": true,
               "formato_aprobacion": "asignatura_presunta",
               "criterio_condiciones_cursada": "RAM 4196/24; presencialidad plena presunta; promoción directa pendiente de confirmación institucional"
             },
