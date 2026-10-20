@@ -387,7 +387,6 @@ input {
       <form method="dialog"><button type="submit" autofocus>Cerrar</button></form>
     </div>
     <p id="descripcion-tabla-resoluciones" class="descripcion-tabla">Buscá el año en que ingresaste a tu carrera.</p>
-    <p id="aclaracion-radiologia" class="aclaracion-plan" hidden><strong>* Radiología · Ingresantes 2026:</strong> si ingresaste en 2026, tu resolución es la <strong>1369/25</strong>. Para consultar tus mesas de examen, seleccioná <strong>5308/24</strong>, ya que las mesas se publicaron con esa resolución.</p>
     <div class="contenedor-tabla" role="region" aria-label="Planes por carrera y año de ingreso" tabindex="0">
       <table class="tabla-planes">
         <thead><tr><th scope="col">Carrera</th><th scope="col">Año de ingreso</th><th scope="col">Resolución</th></tr></thead>
@@ -609,7 +608,6 @@ input {
     function mostrarTablaResoluciones() {
       const cuerpo = document.getElementById('cuerpo-tabla-resoluciones');
       cuerpo.replaceChildren();
-      document.getElementById('aclaracion-radiologia').hidden = ui.carrera.value !== 'Radiología';
       document.getElementById('titulo-tabla-resoluciones').textContent = ui.carrera.value
         ? 'Resoluciones de ' + ui.carrera.value
         : '¿Qué resolución me corresponde?';
@@ -627,10 +625,6 @@ input {
         ingreso.textContent = plan.ingreso;
         const resolucion = document.createElement('td');
         resolucion.textContent = plan.resolucion;
-        if (plan.carrera === 'Radiología' && plan.resolucion === '1369/25') {
-          resolucion.textContent += ' *';
-          resolucion.setAttribute('aria-describedby', 'aclaracion-radiologia');
-        }
         fila.append(carrera, ingreso, resolucion);
         cuerpo.append(fila);
         carreraAnterior = plan.carrera;
@@ -643,7 +637,10 @@ input {
       const porCarrera = mesas.filter(m => m.carrera === ui.carrera.value);
 
       function paso(selector, datos, campo, habilitado, etiqueta, anterior) {
-        llenarSelector(selector, datos.map(m => campo === 'turno' ? m.turno.trim() : m[campo]), habilitado ? etiqueta : anterior);
+        const valores = campo === 'resolucion'
+          ? datos.flatMap(obtenerResolucionesMesa)
+          : datos.map(m => campo === 'turno' ? m.turno.trim() : m[campo]);
+        llenarSelector(selector, valores, habilitado ? etiqueta : anterior);
         selector.disabled = !habilitado;
         if (!habilitado) selector.value = '';
         else if (!selector.value && selector.children.length === 2) selector.value = selector.children[1].value;
@@ -716,7 +713,7 @@ input {
         return (
           (modo === 'carrera' ? (
           (!ui.carrera.value || mesa.carrera === ui.carrera.value) &&
-          (!ui.resolucion.value || mesa.resolucion === ui.resolucion.value) &&
+          (!ui.resolucion.value || obtenerResolucionesMesa(mesa).includes(ui.resolucion.value)) &&
           (!ui.anio.value || mesa.anio === ui.anio.value)
           ) : (
             !docente || [mesa.docente, ...obtenerVocales(mesa)]
