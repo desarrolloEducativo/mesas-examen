@@ -89,6 +89,7 @@
     <button id="reintentar" type="button" hidden>Reintentar</button>
   </section>
   <main id="cartelera" aria-label="Mesas para imprimir" aria-busy="true"></main>
+  <script src="./mesas-tarjetas.js"></script>
   <script>
     const comparar = new Intl.Collator('es', { numeric: true, sensitivity: 'base' });
     const ui = Object.fromEntries(['carrera', 'turno', 'filtros', 'imprimir', 'estado', 'reintentar', 'cartelera']
@@ -156,7 +157,7 @@
         comparar.compare(a.materia, b.materia) || comparar.compare(a.comision, b.comision)).forEach(mesa => {
         const fila = document.createElement('tr');
         const fecha = mesa.fecha.split('-').reverse().join('/');
-        const valores = [mesa.materia, mesa.resolucion, mesa.comision, fecha, mesa.hora,
+        const valores = [mesa.materia, obtenerResolucionesMesa(mesa).join(' y '), mesa.comision, fecha, mesa.hora,
           mesa.sede ?? '', mesa.aula ?? '',
           mesa.docente, mesa.vocal1 ?? mesa.vocal ?? '', mesa.vocal2 ?? ''];
         valores.forEach((valor, indice) => {
