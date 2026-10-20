@@ -1,0 +1,78 @@
+/* Tarjetas compartidas por la consulta de estudiantes y docentes. */
+.mesa {
+  --texto-mesa: #172d42;
+  --secundario-mesa: #4c5b69;
+  --linea-mesa: #dce3e9;
+  min-width: 0;
+  padding: 24px;
+  background: #fff;
+  color: var(--texto-mesa);
+  border: 1px solid var(--linea-mesa);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.mesa h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--texto-mesa);
+  text-wrap: pretty;
+}
+
+.mesa dl, .mesa p { margin: 0; }
+.mesa dt { color: var(--secundario-mesa); font-size: .875rem; font-weight: 500; }
+.mesa dd { min-width: 0; margin: 0; font-weight: 600; }
+
+.mesa-horario {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 16px;
+  background: #eef4f8;
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mesa-horario > div { min-width: 0; }
+.mesa-horario dt { margin-bottom: 5px; }
+.mesa-dia { display: block; font-size: .95rem; font-weight: 500; }
+.mesa-fecha { display: block; font-size: 1.05rem; }
+.mesa-hora { display: block; font-size: 1.65rem; font-weight: 750; line-height: 1.3; white-space: nowrap; }
+.mesa-turno { display: block; margin-top: 4px; font-size: .875rem; font-weight: 500; color: var(--secundario-mesa); }
+
+.mesa-plan { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; }
+.mesa-carrera { grid-column: 1 / -1; }
+.mesa-plan dt { margin-bottom: 3px; }
+
+
+.mesa-lugar { display: flex; flex-wrap: wrap; gap: 12px 24px; padding-top: 16px; border-top: 1px solid var(--linea-mesa); }
+.mesa-lugar > div { min-width: 0; flex: 1 1 100px; }
+.mesa-lugar dt { margin-bottom: 3px; }
+
+.mesa-tribunal { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--linea-mesa); }
+.mesa-tribunal h3 { margin: 0 0 8px; font-size: 1rem; font-weight: 650; }
+.mesa-tribunal dl { display: grid; gap: 0; }
+.mesa-persona { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 12px; padding: 7px 0; align-items: baseline; }
+.mesa-persona dd { font-weight: 500; }
+.mesa-sin-dato { color: var(--secundario-mesa); font-style: italic; }
+
+@media (max-width: 640px) {
+  .mesa { padding: 18px; gap: 18px; }
+  .mesa-horario { padding: 14px; gap: 12px; }
+  .mesa h2 { font-size: 1.125rem; }
+  .mesa-hora { font-size: 1.5rem; }
+}
+
+@media (max-width: 359px) {
+  .mesa { padding: 14px; }
+  .mesa-horario { grid-template-columns: minmax(0, 1fr); }
+  .mesa-horario > div + div { border-top: 1px solid #d0dce6; padding-top: 12px; }
+  .mesa-persona { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
