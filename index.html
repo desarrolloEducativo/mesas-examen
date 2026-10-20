@@ -219,6 +219,7 @@ input {
     .cabecera-dialogo h2 { margin: 0; font-size: 1.3rem; }
     .cabecera-dialogo form { margin: 0; }
     .descripcion-tabla { line-height: 1.6; color: #4c5b69; }
+    .aclaracion-plan { padding: 14px; background: #edf3f8; border-left: 3px solid #28618b; border-radius: 6px; line-height: 1.6; }
     .contenedor-tabla { overflow: auto; max-height: 55vh; max-height: 55dvh; border: 1px solid #dce3eb; border-radius: 8px; }
     .tabla-planes { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .95rem; line-height: 1.5; }
     .tabla-planes th, .tabla-planes td { padding: 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; border-bottom: 1px solid #dce3eb; }
@@ -385,7 +386,8 @@ input {
       <h2 id="titulo-tabla-resoluciones">¿Qué resolución me corresponde?</h2>
       <form method="dialog"><button type="submit" autofocus>Cerrar</button></form>
     </div>
-    <p id="descripcion-tabla-resoluciones" class="descripcion-tabla">Buscá tu carrera y el año en que ingresaste.</p>
+    <p id="descripcion-tabla-resoluciones" class="descripcion-tabla">Buscá el año en que ingresaste a tu carrera.</p>
+    <p id="aclaracion-radiologia" class="aclaracion-plan" hidden><strong>* Radiología · Ingresantes 2026:</strong> si ingresaste en 2026, tu resolución es la <strong>1369/25</strong>. Para consultar tus mesas de examen, seleccioná <strong>5308/24</strong>, ya que las mesas se publicaron con esa resolución.</p>
     <div class="contenedor-tabla" role="region" aria-label="Planes por carrera y año de ingreso" tabindex="0">
       <table class="tabla-planes">
         <thead><tr><th scope="col">Carrera</th><th scope="col">Año de ingreso</th><th scope="col">Resolución</th></tr></thead>
@@ -576,6 +578,13 @@ input {
       });
 
       return [...carreras].sort(([a], [b]) => comparar.compare(a, b)).flatMap(([carrera, resoluciones]) => {
+        if (carrera === 'Radiología') {
+          return [
+            { carrera, resolucion: '1369/25', ingreso: 'Ingresantes 2026' },
+            { carrera, resolucion: '5308/24', ingreso: 'Ingresantes 2025' },
+            { carrera, resolucion: '476/16', ingreso: 'Antes de 2025' }
+          ];
+        }
         const planes = [...resoluciones].map(resolucion => {
           const coincidencia = resolucion.match(/\/(\d{2}|\d{4})$/);
           let anio = coincidencia ? Number(coincidencia[1]) : NaN;
@@ -600,8 +609,12 @@ input {
     function mostrarTablaResoluciones() {
       const cuerpo = document.getElementById('cuerpo-tabla-resoluciones');
       cuerpo.replaceChildren();
+      document.getElementById('aclaracion-radiologia').hidden = ui.carrera.value !== 'Radiología';
+      document.getElementById('titulo-tabla-resoluciones').textContent = ui.carrera.value
+        ? 'Resoluciones de ' + ui.carrera.value
+        : '¿Qué resolución me corresponde?';
       let carreraAnterior;
-      obtenerPlanesPorIngreso(mesas).forEach(plan => {
+      obtenerPlanesPorIngreso(mesas.filter(mesa => mesa.carrera === ui.carrera.value)).forEach(plan => {
         const fila = document.createElement('tr');
         const clases = [];
         if (plan.carrera !== carreraAnterior) clases.push('inicio-carrera');
@@ -614,6 +627,10 @@ input {
         ingreso.textContent = plan.ingreso;
         const resolucion = document.createElement('td');
         resolucion.textContent = plan.resolucion;
+        if (plan.carrera === 'Radiología' && plan.resolucion === '1369/25') {
+          resolucion.textContent += ' *';
+          resolucion.setAttribute('aria-describedby', 'aclaracion-radiologia');
+        }
         fila.append(carrera, ingreso, resolucion);
         cuerpo.append(fila);
         carreraAnterior = plan.carrera;
@@ -622,6 +639,7 @@ input {
 
     function actualizarFiltros() {
       llenarSelector(ui.carrera, mesas.map(m => m.carrera), 'Elegí tu carrera');
+      document.getElementById('abrir-resoluciones').disabled = !ui.carrera.value;
       const porCarrera = mesas.filter(m => m.carrera === ui.carrera.value);
 
       function paso(selector, datos, campo, habilitado, etiqueta, anterior) {
