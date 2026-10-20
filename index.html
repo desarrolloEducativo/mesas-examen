@@ -90,6 +90,15 @@
 
     .busqueda { grid-column: 1 / -1; }
 
+    .modos { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .modos label { flex: 1; min-width: 180px; cursor: pointer; padding: 14px;
+      border: 1px solid #c5cbd2; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
+    .modos label:has(input:checked) { background: #edf3f8; border-color: #28618b; color: #163b59; }
+    .modos input { width: 20px; min-height: 20px; margin: 0; accent-color: #28618b; }
+    .ayuda { margin: 0 0 16px; color: #526275; line-height: 1.5; }
+    .campo small { color: #526275; line-height: 1.5; }
+    .filtro-materia { margin-top: 20px; padding-top: 16px; border-top: 1px solid #e0e3e7; }
+
     label {
       font-size: .9rem;
       font-weight: 600;
@@ -310,6 +319,73 @@ select,
 input {
   border-color: #c5cbd2;
 }  
+
+    /* Lectura rápida de las mesas */
+    .mesa { gap: 18px; justify-content: flex-start; border-radius: 14px;
+      box-shadow: 0 3px 14px rgb(22 59 89 / 5%); }
+    .mesa h2 { font-size: 1.2rem; line-height: 1.35; margin-bottom: 10px; }
+    .cabecera-mesa { flex-wrap: wrap; }
+    .cabecera-mesa h2 { flex-basis: 220px; }
+    .turno-mesa { margin-bottom: 10px; }
+    .bloque-horario { margin-top: 0; padding: 16px; border: 0;
+      border-radius: 10px; background: #f0f5fa; }
+    .fecha-hora { align-items: flex-start; justify-content: space-between; gap: 12px 20px; }
+    .hora { font-size: 1.6rem; }
+    .etiqueta-dato { display: block; font-size: .75rem; font-weight: 600;
+      color: #526275; margin-bottom: 5px; letter-spacing: .02em; }
+    .tribunal { margin-top: auto; padding-top: 16px; border-top: 1px solid #e0e3e7; }
+    .titulo-tribunal { margin: 0 0 10px; font-size: .85rem; color: #163b59; }
+    .tribunal p { margin: 8px 0; display: grid; grid-template-columns: 75px minmax(0, 1fr); gap: 10px; }
+    .nombre-docente { min-width: 0; }
+    #ayuda-resolucion { padding: 12px; border-radius: 8px; background: #f0f5fa; line-height: 1.6; }
+    #ayuda-resolucion strong { display: block; color: #163b59; margin-bottom: 4px; }
+    #orientacion-resolucion { white-space: pre-line; }
+
+    /* Controles y tarjetas adaptados a pantallas chicas. */
+    html { scroll-padding-top: 16px; }
+    main, .campo, .fecha-hora > *, .cabecera-mesa > * { min-width: 0; }
+    select, input, button { font-size: 1rem; min-height: 48px; }
+    select { text-overflow: ellipsis; }
+    input[type="search"] { scroll-margin-top: 20px; }
+    :disabled { cursor: not-allowed; opacity: 1; }
+    select:disabled, input:disabled { color: #606975; background: #f1f3f5; border-color: #dce1e6; }
+    .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    #ver-mesas { background: #163b59; border-color: #163b59; color: white; }
+    #ver-mesas:hover { background: #245778; }
+    #ver-mesas:disabled { background: #e7ebef; border-color: #dce1e6; color: #606975; }
+    #resultados:focus-visible { outline-offset: 4px; }
+    #resultados, #cantidad { scroll-margin-top: 16px; }
+    .badge { max-width: 100%; }
+    .turno-mesa { white-space: normal; }
+    @media (max-width: 760px) {
+      #resultados { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 640px) {
+      header { padding: 8px 16px; }
+      .logo-institucional { max-width: 240px; }
+      main { padding: 20px 12px max(28px, env(safe-area-inset-bottom)); }
+      .titulo { margin-bottom: 20px; }
+      .titulo p, .ayuda { font-size: .95rem; }
+      fieldset { padding: 16px 12px; }
+      .modos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .modos label { min-width: 0; padding: 12px 8px; font-size: .9rem; gap: 8px; }
+      .modos input { flex-shrink: 0; min-height: 20px; }
+      .acciones > button { flex: 1 1 140px; }
+      .mesa { padding: 16px; gap: 16px; }
+      .cabecera-mesa { display: flex; flex-direction: column; gap: 6px; }
+      .cabecera-mesa h2 { flex: none; margin-bottom: 0; font-size: 1.15rem; }
+      .turno-mesa { margin: 0 0 4px; align-self: flex-start; }
+      .bloque-horario { padding: 12px; }
+      .fecha-hora { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .fecha { font-size: 1rem; }
+      .hora { font-size: 1.5rem; }
+      .tribunal p { grid-template-columns: 65px minmax(0, 1fr); gap: 8px; }
+      #estado { padding: 18px; }
+      #cantidad { margin-top: 20px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
   </style>
 </head>
 
@@ -334,37 +410,51 @@ input {
     <fieldset id="filtros" disabled>
       <legend>Buscar mesas</legend>
 
-      <div class="filtros">
-        <div class="campo">
-          <label for="carrera">Carrera</label>
-          <select id="carrera">
-            <option value="">Todas las carreras</option>
-          </select>
-        </div>
+      <div class="modos" role="group" aria-label="Cómo querés buscar">
+        <label><input type="radio" name="modo" value="carrera" checked> Por carrera</label>
+        <label><input type="radio" name="modo" value="docente"> Por docente</label>
+      </div>
 
+      <div id="grupo-carrera">
+        <p class="ayuda">Seguí estos pasos para encontrar tus mesas.</p>
         <div class="campo">
-          <label for="resolucion">Resolución</label>
-          <select id="resolucion">
-            <option value="">Todas las resoluciones</option>
-          </select>
+          <label for="carrera">1. Carrera</label>
+          <select id="carrera"><option value="">Elegí tu carrera</option></select>
         </div>
+      </div>
 
+      <div id="grupo-docente" hidden>
+        <p class="ayuda">Encontrá las mesas de un docente en todas las carreras, como titular o vocal.</p>
         <div class="campo">
-          <label for="anio">Año</label>
-          <select id="anio">
-            <option value="">Todos los años</option>
-          </select>
+          <label for="docente">Nombre o apellido del docente</label>
+          <input id="docente" type="search" list="lista-docentes" placeholder="Empezá a escribir un nombre o apellido" autocomplete="off" aria-describedby="ayuda-docente">
+          <datalist id="lista-docentes"></datalist>
+          <small id="ayuda-docente">Podés escribir parte del nombre o elegir una de las sugerencias.</small>
         </div>
+      </div>
 
+      <div class="campo" style="margin-top: 16px;">
+        <label id="etiqueta-turno" for="turno">2. Turno</label>
+        <select id="turno"><option value="">Primero elegí tu carrera</option></select>
+      </div>
+
+      <div id="grupo-plan" class="filtros" style="margin-top: 16px;">
         <div class="campo">
-          <label for="docente">Docente (titular o vocal)</label>
-          <select id="docente">
-            <option value="">Todos los docentes</option>
-          </select>
+          <label for="anio">3. Año</label>
+          <select id="anio"><option value="">Primero elegí tu turno</option></select>
         </div>
+        <div class="campo">
+          <label for="resolucion">4. Resolución del plan</label>
+          <select id="resolucion" aria-describedby="ayuda-resolucion"><option value="">Primero elegí tu año</option></select>
+          <small id="ayuda-resolucion">
+            <strong>¿Qué resolución me corresponde?</strong>
+            <span id="orientacion-resolucion">La resolución identifica tu plan de estudios. Elegí tu carrera para ver la orientación disponible.</span>
+          </small>
+        </div>
+      </div>
 
-        <div class="campo busqueda">
-          <label for="busqueda">Materia</label>
+        <div class="campo filtro-materia">
+          <label for="busqueda">Materia (opcional)</label>
           <input
             id="busqueda"
             type="search"
@@ -372,9 +462,9 @@ input {
             autocomplete="off"
           >
         </div>
-      </div>
 
       <div class="acciones">
+        <button id="ver-mesas" type="button" disabled>Ver mesas</button>
         <button id="limpiar" type="button">Limpiar filtros</button>
       </div>
     </fieldset>
@@ -396,6 +486,7 @@ input {
 
     <section
       id="resultados"
+      tabindex="-1"
       aria-label="Mesas publicadas"
       aria-busy="true"
     ></section>
@@ -411,8 +502,17 @@ input {
 
     const API_URL = './mesas.json';
 
+    // Año de ingreso a la carrera, no el año en que se rinde el examen.
+    const ORIENTACION_PLANES = {
+      'Laboratorio de Análisis Clínicos':
+        'Si ingresaste en 2026: resolución 6182/25.\n' +
+        'Si ingresaste antes de 2026: resolución 205/18.\n' +
+        'Si cambiaste de plan o tenés dudas, consultá en Secretaría antes de elegir.'
+    };
+
     let mesas = [];
     let ui;
+    let modo = 'carrera';
 
     const comparar = new Intl.Collator('es', {
       numeric: true,
@@ -432,26 +532,46 @@ input {
         'resolucion',
         'anio',
         'docente',
+        'turno',
         'busqueda',
         'filtros',
         'estado',
         'resultados',
         'cantidad',
         'limpiar',
+        'ver-mesas',
         'reintentar'
       ].map(id => [id, document.getElementById(id)]));
 
-      ['carrera', 'resolucion', 'anio', 'docente'].forEach(id => {
+      ['carrera', 'turno', 'anio', 'resolucion'].forEach(id => {
         ui[id].addEventListener('change', function () {
           actualizarFiltros();
           aplicarFiltros();
         });
       });
 
+      ui['ver-mesas'].addEventListener('click', function () {
+        ui.resultados.focus({ preventScroll: true });
+        document.getElementById('cantidad').scrollIntoView({ block: 'start' });
+      });
       ui.busqueda.addEventListener('input', aplicarFiltros);
+      ui.docente.addEventListener('input', aplicarFiltros);
+      document.querySelectorAll('input[name="modo"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+          modo = radio.value;
+          document.getElementById('grupo-carrera').hidden = modo !== 'carrera';
+          document.getElementById('grupo-docente').hidden = modo !== 'docente';
+          document.getElementById('grupo-plan').hidden = modo !== 'carrera';
+          document.getElementById('etiqueta-turno').textContent = modo === 'carrera' ? '2. Turno' : 'Turno (opcional)';
+          ui.turno.value = '';
+          ui.busqueda.value = '';
+          actualizarFiltros();
+          aplicarFiltros();
+        });
+      });
 
       ui.limpiar.addEventListener('click', function () {
-        ['carrera', 'resolucion', 'anio', 'docente', 'busqueda']
+        ['carrera', 'anio', 'resolucion', 'docente', 'turno', 'busqueda']
           .forEach(id => {
             ui[id].value = '';
           });
@@ -466,6 +586,7 @@ input {
     });
 
     function cargarMesas() {
+      ui['ver-mesas'].disabled = true;
       ui.filtros.disabled = true;
       ui.reintentar.hidden = true;
       ui.estado.hidden = false;
@@ -553,41 +674,31 @@ input {
     }
 
     function actualizarFiltros() {
-      llenarSelector(
-        ui.carrera,
-        mesas.map(m => m.carrera),
-        'Todas las carreras'
-      );
+      llenarSelector(ui.carrera, mesas.map(m => m.carrera), 'Elegí tu carrera');
+      document.getElementById('orientacion-resolucion').textContent =
+        ORIENTACION_PLANES[ui.carrera.value] || (ui.carrera.value
+          ? 'La resolución identifica tu plan de estudios. Si no sabés cuál te corresponde, consultá en Secretaría indicando tu carrera y el año en que ingresaste. El año de la resolución no es tu año de ingreso.'
+          : 'La resolución identifica tu plan de estudios. Elegí tu carrera para ver la orientación disponible.');
+      const porCarrera = mesas.filter(m => m.carrera === ui.carrera.value);
 
-      const porCarrera = mesas.filter(m =>
-        !ui.carrera.value || m.carrera === ui.carrera.value
-      );
+      function paso(selector, datos, campo, habilitado, etiqueta, anterior) {
+        llenarSelector(selector, datos.map(m => campo === 'turno' ? m.turno.trim() : m[campo]), habilitado ? etiqueta : anterior);
+        selector.disabled = !habilitado;
+        if (!habilitado) selector.value = '';
+        else if (!selector.value && selector.children.length === 2) selector.value = selector.children[1].value;
+      }
 
-      llenarSelector(
-        ui.resolucion,
-        porCarrera.map(m => m.resolucion),
-        'Todas las resoluciones'
-      );
-
-      const porPlan = porCarrera.filter(m =>
-        !ui.resolucion.value || m.resolucion === ui.resolucion.value
-      );
-
-      llenarSelector(
-        ui.anio,
-        porPlan.map(m => m.anio),
-        'Todos los años'
-      );
-
-      const porAnio = porPlan.filter(m =>
-        !ui.anio.value || m.anio === ui.anio.value
-      );
-
-      llenarSelector(
-        ui.docente,
-        porAnio.flatMap(m => [m.docente || '', ...obtenerVocales(m)]),
-        'Todos los docentes'
-      );
+      if (modo === 'carrera') {
+        paso(ui.turno, porCarrera, 'turno', !!ui.carrera.value, 'Elegí tu turno', 'Primero elegí tu carrera');
+      } else {
+        llenarSelector(ui.turno, mesas.map(m => m.turno.trim()), 'Todos los turnos');
+        ui.turno.disabled = false;
+      }
+      const porTurno = porCarrera.filter(m => m.turno.trim() === ui.turno.value);
+      paso(ui.anio, porTurno, 'anio', !!ui.carrera.value && !!ui.turno.value, 'Elegí tu año', 'Primero elegí tu turno');
+      const porAnio = porTurno.filter(m => m.anio === ui.anio.value);
+      paso(ui.resolucion, porAnio, 'resolucion', !!ui.anio.value, 'Elegí tu resolución', 'Primero elegí tu año');
+      llenarSelector(document.getElementById('lista-docentes'), mesas.flatMap(m => [m.docente || '', ...obtenerVocales(m)]), '');
     }
 
     function llenarSelector(selector, valores, etiqueta) {
@@ -625,18 +736,32 @@ input {
     }
 
     function aplicarFiltros() {
+      if (modo === 'carrera') {
+        const pendiente = ['carrera', 'turno', 'anio', 'resolucion'].find(id => !ui[id].value);
+        ui.busqueda.disabled = !!pendiente;
+        if (pendiente) {
+          renderizarMesas([]);
+          ui.cantidad.textContent = '';
+          ui.estado.textContent = {carrera: 'Para empezar, elegí tu carrera.', turno: 'Ahora elegí el turno en el que cursás.', anio: 'Elegí el año que estás cursando para ver tus mesas.', resolucion: 'Elegí la resolución de tu plan para ver tus mesas.'}[pendiente];
+          return;
+        }
+      } else {
+        ui.busqueda.disabled = false;
+      }
       const busqueda = normalizarBusqueda(ui.busqueda.value);
+      const docente = normalizarBusqueda(ui.docente.value);
 
       const resultado = mesas.filter(mesa => {
         return (
+          (modo === 'carrera' ? (
           (!ui.carrera.value || mesa.carrera === ui.carrera.value) &&
           (!ui.resolucion.value || mesa.resolucion === ui.resolucion.value) &&
-          (!ui.anio.value || mesa.anio === ui.anio.value) &&
-          (
-            !ui.docente.value ||
-            mesa.docente === ui.docente.value ||
-            obtenerVocales(mesa).includes(ui.docente.value)
-          ) &&
+          (!ui.anio.value || mesa.anio === ui.anio.value)
+          ) : (
+            !docente || [mesa.docente, ...obtenerVocales(mesa)]
+              .some(nombre => normalizarBusqueda(nombre || '').includes(docente))
+          )) &&
+          (!ui.turno.value || mesa.turno.trim() === ui.turno.value) &&
           normalizarBusqueda(mesa.materia).includes(busqueda)
         );
       });
@@ -646,6 +771,8 @@ input {
 
     function renderizarMesas(resultado) {
       ui.resultados.replaceChildren();
+      ui['ver-mesas'].disabled = resultado.length === 0;
+      ui['ver-mesas'].textContent = resultado.length ? 'Ver ' + resultado.length + (resultado.length === 1 ? ' mesa' : ' mesas') : 'Ver mesas';
 
       ui.cantidad.textContent = resultado.length === 1
         ? '1 mesa publicada'
@@ -692,7 +819,7 @@ input {
         }
 
         if (mesa.resolucion) {
-          detalles.push('Res. ' + mesa.resolucion);
+          detalles.push('Resolución ' + mesa.resolucion);
         }
 
         if (detalles.length) {
@@ -720,12 +847,18 @@ input {
           mesa.dia + ' ' +
           formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
 
-        fecha.append(tiempo);
+        const etiquetaFecha = document.createElement('span');
+        etiquetaFecha.className = 'etiqueta-dato';
+        etiquetaFecha.textContent = 'Fecha del examen';
+        fecha.append(etiquetaFecha, tiempo);
         fechaHora.append(fecha);
 
         const hora = document.createElement('p');
         hora.className = 'hora';
-        hora.textContent = mesa.hora + ' hs';
+        const etiquetaHora = document.createElement('span');
+        etiquetaHora.className = 'etiqueta-dato';
+        etiquetaHora.textContent = 'Horario';
+        hora.append(etiquetaHora, document.createTextNode(mesa.hora + ' hs'));
         fechaHora.append(hora);
 
         const grupos = [];
@@ -755,16 +888,20 @@ input {
 
         const tribunal = document.createElement('div');
         tribunal.className = 'tribunal';
+        const tituloTribunal = document.createElement('h3');
+        tituloTribunal.className = 'titulo-tribunal';
+        tituloTribunal.textContent = 'Docentes del tribunal';
+        tribunal.append(tituloTribunal);
 
         const pTitular = document.createElement('p');
 
         const etiquetaTitular = document.createElement('strong');
         etiquetaTitular.textContent = 'Titular:';
 
-        pTitular.append(
-          etiquetaTitular,
-          document.createTextNode(' ' + (mesa.docente || 'No informado'))
-        );
+        const nombreTitular = document.createElement('span');
+        nombreTitular.className = 'nombre-docente';
+        nombreTitular.textContent = mesa.docente || 'No informado';
+        pTitular.append(etiquetaTitular, nombreTitular);
 
         tribunal.append(pTitular);
 
@@ -772,10 +909,10 @@ input {
           const pVocal = document.createElement('p');
           const etiquetaVocal = document.createElement('strong');
           etiquetaVocal.textContent = 'Vocal ' + (indice + 1) + ':';
-          pVocal.append(
-            etiquetaVocal,
-            document.createTextNode(' ' + (vocal || 'No informado'))
-          );
+          const nombreVocal = document.createElement('span');
+          nombreVocal.className = 'nombre-docente';
+          nombreVocal.textContent = vocal || 'No informado';
+          pVocal.append(etiquetaVocal, nombreVocal);
           tribunal.append(pVocal);
         });
 
