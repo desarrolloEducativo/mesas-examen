@@ -163,108 +163,6 @@
       gap: 16px;
     }
 
-    /* Tarjeta de mesa */
-    .mesa {
-      background: white;
-      border: 1px solid #dce3eb;
-      border-top: 4px solid #28618b;
-      border-radius: 10px;
-      padding: 22px;
-      overflow-wrap: anywhere;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .cabecera-mesa {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .cabecera-mesa h2 { flex: 1; min-width: 0; }
-    .turno-mesa { flex-shrink: 0; white-space: nowrap; }
-
-    .mesa h2 {
-      font-size: 1.15rem;
-      margin: 0 0 6px;
-      color: #163b59;
-    }
-
-    .mesa p {
-      margin: 4px 0;
-      line-height: 1.5;
-    }
-
-    .carrera {
-      font-weight: 600;
-      color: #203044;
-      font-size: .95rem;
-    }
-
-    .plan {
-      color: #526275;
-      font-size: .88rem;
-    }
-
-    .bloque-horario {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid #e5eaf0;
-    }
-
-    .fecha-hora {
-      display: flex;
-      align-items: baseline;
-      gap: 6px 16px;
-      flex-wrap: wrap;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .fecha {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -.015em;
-      color: #203044;
-    }
-
-    .hora {
-      font-size: 1.2rem;
-      font-weight: 750;
-      letter-spacing: -.02em;
-      white-space: nowrap;
-      color: #163b59;
-    }
-
-    .badges {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .badge {
-      background: #edf3f8;
-      color: #163b59;
-      font-size: .8rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 12px;
-    }
-
-    .tribunal {
-      margin-top: 14px;
-      padding-top: 10px;
-      border-top: 1px dashed #dce3eb;
-      font-size: .88rem;
-      color: #526275;
-    }
-
-    .tribunal p { margin: 2px 0; }
-    .tribunal strong { color: #163b59; }
-
     footer {
       margin-top: 28px;
       color: #526275;
@@ -280,7 +178,6 @@
       .titulo { margin-bottom: 24px; }
       .filtros, #resultados { grid-template-columns: 1fr; }
       fieldset { padding: 16px; }
-      .mesa { padding: 18px; }
       .logo-institucional {
   max-width: 280px;
 }
@@ -299,20 +196,13 @@ header {
 
 .titulo p,
 #cantidad,
-.plan,
-.tribunal,
 footer {
   color: #606975;
 }
 
 fieldset,
-#estado,
-.mesa {
+#estado {
   border-color: #e0e3e7;
-}
-
-.mesa {
-  border-top-color: #163b59;
 }
 
 select,
@@ -320,30 +210,33 @@ input {
   border-color: #c5cbd2;
 }  
 
-    /* Lectura rápida de las mesas */
-    .mesa { gap: 18px; justify-content: flex-start; border-radius: 14px;
-      box-shadow: 0 3px 14px rgb(22 59 89 / 5%); }
-    .mesa h2 { font-size: 1.2rem; line-height: 1.35; margin-bottom: 10px; }
-    .cabecera-mesa { flex-wrap: wrap; }
-    .cabecera-mesa h2 { flex-basis: 220px; }
-    .turno-mesa { margin-bottom: 10px; }
-    .bloque-horario { margin-top: 0; padding: 16px; border: 0;
-      border-radius: 10px; background: #f0f5fa; }
-    .fecha-hora { align-items: flex-start; justify-content: space-between; gap: 12px 20px; }
-    .hora { font-size: 1.6rem; }
-    .etiqueta-dato { display: block; font-size: .75rem; font-weight: 600;
-      color: #526275; margin-bottom: 5px; letter-spacing: .02em; }
-    .tribunal { margin-top: auto; padding-top: 16px; border-top: 1px solid #e0e3e7; }
-    .titulo-tribunal { margin: 0 0 10px; font-size: .85rem; color: #163b59; }
-    .tribunal p { margin: 8px 0; display: grid; grid-template-columns: 75px minmax(0, 1fr); gap: 10px; }
-    .nombre-docente { min-width: 0; }
     #ayuda-resolucion { padding: 12px; border-radius: 8px; background: #f0f5fa; line-height: 1.6; }
-    #ayuda-resolucion strong { display: block; color: #163b59; margin-bottom: 4px; }
-    #orientacion-resolucion { white-space: pre-line; }
+    #abrir-resoluciones { display: block; text-align: left; width: 100%; margin-bottom: 6px; }
+    #tabla-resoluciones { width: min(860px, calc(100% - 24px)); max-height: 90vh; max-height: 90dvh;
+      padding: 24px; border: 1px solid #dce3eb; border-radius: 12px; color: #172d42; }
+    #tabla-resoluciones::backdrop { background: rgb(15 30 45 / 55%); }
+    .cabecera-dialogo { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .cabecera-dialogo h2 { margin: 0; font-size: 1.3rem; }
+    .cabecera-dialogo form { margin: 0; }
+    .descripcion-tabla { line-height: 1.6; color: #4c5b69; }
+    .contenedor-tabla { overflow: auto; max-height: 55vh; max-height: 55dvh; border: 1px solid #dce3eb; border-radius: 8px; }
+    .tabla-planes { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .95rem; line-height: 1.5; }
+    .tabla-planes th, .tabla-planes td { padding: 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; border-bottom: 1px solid #dce3eb; }
+    .tabla-planes thead th { position: sticky; top: 0; background: #edf3f8; z-index: 1; }
+    .tabla-planes th:first-child { width: 44%; }
+    .tabla-planes tbody th { font-weight: 600; }
+    .tabla-planes tr.carrera-elegida { background: #edf5fa; }
+    .tabla-planes tr.inicio-carrera > * { border-top: 2px solid #b8c6d2; }
+    @media (max-width: 640px) {
+      #tabla-resoluciones { padding: 16px 12px; }
+      .tabla-planes { font-size: .875rem; }
+      .tabla-planes th, .tabla-planes td { padding: 10px 7px; }
+      .cabecera-dialogo { flex-wrap: wrap; }
+    }
 
     /* Controles y tarjetas adaptados a pantallas chicas. */
     html { scroll-padding-top: 16px; }
-    main, .campo, .fecha-hora > *, .cabecera-mesa > * { min-width: 0; }
+    main, .campo { min-width: 0; }
     select, input, button { font-size: 1rem; min-height: 48px; }
     select { text-overflow: ellipsis; }
     input[type="search"] { scroll-margin-top: 20px; }
@@ -355,8 +248,6 @@ input {
     #ver-mesas:disabled { background: #e7ebef; border-color: #dce1e6; color: #606975; }
     #resultados:focus-visible { outline-offset: 4px; }
     #resultados, #cantidad { scroll-margin-top: 16px; }
-    .badge { max-width: 100%; }
-    .turno-mesa { white-space: normal; }
     @media (max-width: 760px) {
       #resultados { grid-template-columns: minmax(0, 1fr); }
     }
@@ -371,15 +262,6 @@ input {
       .modos label { min-width: 0; padding: 12px 8px; font-size: .9rem; gap: 8px; }
       .modos input { flex-shrink: 0; min-height: 20px; }
       .acciones > button { flex: 1 1 140px; }
-      .mesa { padding: 16px; gap: 16px; }
-      .cabecera-mesa { display: flex; flex-direction: column; gap: 6px; }
-      .cabecera-mesa h2 { flex: none; margin-bottom: 0; font-size: 1.15rem; }
-      .turno-mesa { margin: 0 0 4px; align-self: flex-start; }
-      .bloque-horario { padding: 12px; }
-      .fecha-hora { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
-      .fecha { font-size: 1rem; }
-      .hora { font-size: 1.5rem; }
-      .tribunal p { grid-template-columns: 65px minmax(0, 1fr); gap: 8px; }
       #estado { padding: 18px; }
       #cantidad { margin-top: 20px; }
     }
@@ -387,6 +269,7 @@ input {
       html { scroll-behavior: smooth; }
     }
   </style>
+  <link rel="stylesheet" href="./mesas-tarjetas.css">
 </head>
 
 <body>
@@ -447,8 +330,8 @@ input {
           <label for="resolucion">4. Resolución del plan</label>
           <select id="resolucion" aria-describedby="ayuda-resolucion"><option value="">Primero elegí tu año</option></select>
           <small id="ayuda-resolucion">
-            <strong>¿Qué resolución me corresponde?</strong>
-            <span id="orientacion-resolucion">La resolución identifica tu plan de estudios. Elegí tu carrera para ver la orientación disponible.</span>
+            <button id="abrir-resoluciones" type="button" aria-haspopup="dialog" aria-controls="tabla-resoluciones">¿Qué resolución me corresponde?</button>
+            Consultá la tabla según el año en que ingresaste a la carrera.
           </small>
         </div>
       </div>
@@ -497,18 +380,26 @@ input {
     </footer>
   </main>
 
+  <dialog id="tabla-resoluciones" aria-labelledby="titulo-tabla-resoluciones" aria-describedby="descripcion-tabla-resoluciones">
+    <div class="cabecera-dialogo">
+      <h2 id="titulo-tabla-resoluciones">¿Qué resolución me corresponde?</h2>
+      <form method="dialog"><button type="submit" autofocus>Cerrar</button></form>
+    </div>
+    <p id="descripcion-tabla-resoluciones" class="descripcion-tabla">Buscá tu carrera y el año en que ingresaste.</p>
+    <div class="contenedor-tabla" role="region" aria-label="Planes por carrera y año de ingreso" tabindex="0">
+      <table class="tabla-planes">
+        <thead><tr><th scope="col">Carrera</th><th scope="col">Año de ingreso</th><th scope="col">Resolución</th></tr></thead>
+        <tbody id="cuerpo-tabla-resoluciones"></tbody>
+      </table>
+    </div>
+    <p class="descripcion-tabla">Se muestran los planes de las mesas publicadas. Si tenés dudas, consultá en Preceptoría.</p>
+  </dialog>
+
+  <script src="./mesas-tarjetas.js"></script>
   <script>
     'use strict';
 
     const API_URL = './mesas.json';
-
-    // Año de ingreso a la carrera, no el año en que se rinde el examen.
-    const ORIENTACION_PLANES = {
-      'Laboratorio de Análisis Clínicos':
-        'Si ingresaste en 2026: resolución 6182/25.\n' +
-        'Si ingresaste antes de 2026: resolución 205/18.\n' +
-        'Si cambiaste de plan o tenés dudas, consultá en Secretaría antes de elegir.'
-    };
 
     let mesas = [];
     let ui;
@@ -555,6 +446,10 @@ input {
         document.getElementById('cantidad').scrollIntoView({ block: 'start' });
       });
       ui.busqueda.addEventListener('input', aplicarFiltros);
+      document.getElementById('abrir-resoluciones').addEventListener('click', function () {
+        mostrarTablaResoluciones();
+        document.getElementById('tabla-resoluciones').showModal();
+      });
       ui.docente.addEventListener('input', aplicarFiltros);
       document.querySelectorAll('input[name="modo"]').forEach(radio => {
         radio.addEventListener('change', function () {
@@ -673,12 +568,60 @@ input {
       ui.reintentar.hidden = false;
     }
 
+    function obtenerPlanesPorIngreso(datos) {
+      const carreras = new Map();
+      datos.forEach(mesa => {
+        if (!carreras.has(mesa.carrera)) carreras.set(mesa.carrera, new Set());
+        carreras.get(mesa.carrera).add(mesa.resolucion);
+      });
+
+      return [...carreras].sort(([a], [b]) => comparar.compare(a, b)).flatMap(([carrera, resoluciones]) => {
+        const planes = [...resoluciones].map(resolucion => {
+          const coincidencia = resolucion.match(/\/(\d{2}|\d{4})$/);
+          let anio = coincidencia ? Number(coincidencia[1]) : NaN;
+          if (coincidencia && coincidencia[1].length === 2) anio += anio >= 70 ? 1900 : 2000;
+          return { carrera, resolucion, desde: anio + 1 };
+        }).sort((a, b) => a.desde - b.desde);
+
+        return planes.map((plan, indice) => {
+          const siguiente = planes[indice + 1];
+          let ingreso = 'Consultá en Secretaría';
+          if (Number.isFinite(plan.desde)) {
+            if (!siguiente) ingreso = 'Desde ' + plan.desde;
+            else if (Number.isFinite(siguiente.desde)) ingreso = indice === 0
+              ? 'Antes de ' + siguiente.desde
+              : 'De ' + plan.desde + ' a ' + (siguiente.desde - 1);
+          }
+          return { carrera, resolucion: plan.resolucion, ingreso };
+        }).reverse();
+      });
+    }
+
+    function mostrarTablaResoluciones() {
+      const cuerpo = document.getElementById('cuerpo-tabla-resoluciones');
+      cuerpo.replaceChildren();
+      let carreraAnterior;
+      obtenerPlanesPorIngreso(mesas).forEach(plan => {
+        const fila = document.createElement('tr');
+        const clases = [];
+        if (plan.carrera !== carreraAnterior) clases.push('inicio-carrera');
+        if (plan.carrera === ui.carrera.value) clases.push('carrera-elegida');
+        fila.className = clases.join(' ');
+        const carrera = document.createElement('th');
+        carrera.setAttribute('scope', 'row');
+        carrera.textContent = plan.carrera;
+        const ingreso = document.createElement('td');
+        ingreso.textContent = plan.ingreso;
+        const resolucion = document.createElement('td');
+        resolucion.textContent = plan.resolucion;
+        fila.append(carrera, ingreso, resolucion);
+        cuerpo.append(fila);
+        carreraAnterior = plan.carrera;
+      });
+    }
+
     function actualizarFiltros() {
       llenarSelector(ui.carrera, mesas.map(m => m.carrera), 'Elegí tu carrera');
-      document.getElementById('orientacion-resolucion').textContent =
-        ORIENTACION_PLANES[ui.carrera.value] || (ui.carrera.value
-          ? 'La resolución identifica tu plan de estudios. Si no sabés cuál te corresponde, consultá en Secretaría indicando tu carrera y el año en que ingresaste. El año de la resolución no es tu año de ingreso.'
-          : 'La resolución identifica tu plan de estudios. Elegí tu carrera para ver la orientación disponible.');
       const porCarrera = mesas.filter(m => m.carrera === ui.carrera.value);
 
       function paso(selector, datos, campo, habilitado, etiqueta, anterior) {
@@ -784,141 +727,11 @@ input {
         ? ''
         : 'No hay mesas publicadas para los criterios seleccionados.';
 
-      resultado.forEach(mesa => {
-        const tarjeta = document.createElement('article');
-        tarjeta.className = 'mesa';
-
-        const encab = document.createElement('div');
-
-        const h2 = document.createElement('h2');
-        h2.textContent = mesa.materia;
-        const cabecera = document.createElement('div');
-        cabecera.className = 'cabecera-mesa';
-        cabecera.append(h2);
-        if (mesa.turno && mesa.turno.trim()) {
-          const turno = document.createElement('span');
-          turno.className = 'badge turno-mesa';
-          turno.textContent = 'Turno ' + mesa.turno.trim();
-          cabecera.append(turno);
-        }
-        encab.append(cabecera);
-
-        const carrera = document.createElement('p');
-        carrera.className = 'carrera';
-        carrera.textContent = mesa.carrera;
-        encab.append(carrera);
-
-        const detalles = [];
-
-        if (mesa.anio) {
-          detalles.push(
-            /^\d+$/.test(mesa.anio)
-              ? mesa.anio + '.º año'
-              : 'Año ' + mesa.anio
-          );
-        }
-
-        if (mesa.resolucion) {
-          detalles.push('Resolución ' + mesa.resolucion);
-        }
-
-        if (detalles.length) {
-          const plan = document.createElement('p');
-          plan.className = 'plan';
-          plan.textContent = detalles.join(' · ');
-          encab.append(plan);
-        }
-
-        tarjeta.append(encab);
-
-        const bloqueHorario = document.createElement('div');
-        bloqueHorario.className = 'bloque-horario';
-
-        const fechaHora = document.createElement('div');
-        fechaHora.className = 'fecha-hora';
-        bloqueHorario.append(fechaHora);
-
-        const fecha = document.createElement('p');
-        fecha.className = 'fecha';
-
-        const tiempo = document.createElement('time');
-        tiempo.setAttribute('datetime', mesa.fecha);
-        tiempo.textContent =
-          mesa.dia + ' ' +
-          formatoFecha.format(new Date(mesa.fecha + 'T12:00:00Z'));
-
-        const etiquetaFecha = document.createElement('span');
-        etiquetaFecha.className = 'etiqueta-dato';
-        etiquetaFecha.textContent = 'Fecha del examen';
-        fecha.append(etiquetaFecha, tiempo);
-        fechaHora.append(fecha);
-
-        const hora = document.createElement('p');
-        hora.className = 'hora';
-        const etiquetaHora = document.createElement('span');
-        etiquetaHora.className = 'etiqueta-dato';
-        etiquetaHora.textContent = 'Horario';
-        hora.append(etiquetaHora, document.createTextNode(mesa.hora + ' hs'));
-        fechaHora.append(hora);
-
-        const grupos = [];
-
-        if (mesa.comision) {
-          grupos.push('Comisión ' + mesa.comision);
-        }
-
-        if (mesa.sede && mesa.sede.trim()) grupos.push('Sede: ' + mesa.sede.trim());
-        if (mesa.aula && mesa.aula.trim()) grupos.push('Aula: ' + mesa.aula.trim());
-
-        if (grupos.length) {
-          const badges = document.createElement('div');
-          badges.className = 'badges';
-
-          grupos.forEach(texto => {
-            const badge = document.createElement('span');
-            badge.className = 'badge';
-            badge.textContent = texto;
-            badges.append(badge);
-          });
-
-          bloqueHorario.append(badges);
-        }
-
-        tarjeta.append(bloqueHorario);
-
-        const tribunal = document.createElement('div');
-        tribunal.className = 'tribunal';
-        const tituloTribunal = document.createElement('h3');
-        tituloTribunal.className = 'titulo-tribunal';
-        tituloTribunal.textContent = 'Docentes del tribunal';
-        tribunal.append(tituloTribunal);
-
-        const pTitular = document.createElement('p');
-
-        const etiquetaTitular = document.createElement('strong');
-        etiquetaTitular.textContent = 'Titular:';
-
-        const nombreTitular = document.createElement('span');
-        nombreTitular.className = 'nombre-docente';
-        nombreTitular.textContent = mesa.docente || 'No informado';
-        pTitular.append(etiquetaTitular, nombreTitular);
-
-        tribunal.append(pTitular);
-
-        obtenerVocales(mesa).forEach((vocal, indice) => {
-          const pVocal = document.createElement('p');
-          const etiquetaVocal = document.createElement('strong');
-          etiquetaVocal.textContent = 'Vocal ' + (indice + 1) + ':';
-          const nombreVocal = document.createElement('span');
-          nombreVocal.className = 'nombre-docente';
-          nombreVocal.textContent = vocal || 'No informado';
-          pVocal.append(etiquetaVocal, nombreVocal);
-          tribunal.append(pVocal);
-        });
-
-        tarjeta.append(tribunal);
-        ui.resultados.append(tarjeta);
+      const tarjetas = document.createDocumentFragment();
+      resultado.forEach((mesa, indice) => {
+        tarjetas.append(crearTarjetaMesa(mesa, indice));
       });
+      ui.resultados.append(tarjetas);
     }
   </script>
 </body>
