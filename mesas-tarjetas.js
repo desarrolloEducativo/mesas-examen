@@ -64,6 +64,7 @@ function crearTarjetaMesa(mesa, indice) {
   const personas = elemento('dl');
   const nombres = [mesa.docente, ...obtenerVocales(mesa)];
   nombres.forEach((nombre, posicion) => {
+    if (posicion === 2 && !nombre?.trim()) return;
     const valor = dato(personas, posicion === 0 ? 'Titular' : 'Vocal ' + posicion, nombre || 'No informado', 'mesa-persona');
     if (!nombre) valor.className = 'mesa-sin-dato';
   });
