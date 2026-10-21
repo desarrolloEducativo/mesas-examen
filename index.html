@@ -310,10 +310,11 @@ input {
       <div id="grupo-docente" hidden>
         <p class="ayuda">Encontrá las mesas de un docente en todas las carreras, como titular o vocal.</p>
         <div class="campo">
-          <label for="docente">Nombre o apellido del docente</label>
-          <input id="docente" type="search" list="lista-docentes" placeholder="Empezá a escribir un nombre o apellido" autocomplete="off" aria-describedby="ayuda-docente">
-          <datalist id="lista-docentes"></datalist>
-          <small id="ayuda-docente">Podés escribir parte del nombre o elegir una de las sugerencias.</small>
+          <label for="docente">Docente (titular o vocal)</label>
+          <select id="docente" aria-describedby="ayuda-docente">
+            <option value="">Todos los docentes</option>
+          </select>
+          <small id="ayuda-docente">Elegí tu nombre en el desplegable.</small>
         </div>
       </div>
 
@@ -337,7 +338,7 @@ input {
         </div>
       </div>
 
-        <div class="campo filtro-materia">
+        <div class="campo filtro-materia" hidden>
           <label for="busqueda">Materia (opcional)</label>
           <input
             id="busqueda"
@@ -451,7 +452,7 @@ input {
         mostrarTablaResoluciones();
         document.getElementById('tabla-resoluciones').showModal();
       });
-      ui.docente.addEventListener('input', aplicarFiltros);
+      ui.docente.addEventListener('change', aplicarFiltros);
       document.querySelectorAll('input[name="modo"]').forEach(radio => {
         radio.addEventListener('change', function () {
           modo = radio.value;
@@ -656,7 +657,7 @@ input {
       paso(ui.anio, porTurno, 'anio', !!ui.carrera.value && !!ui.turno.value, 'Elegí tu año', 'Primero elegí tu turno');
       const porAnio = porTurno.filter(m => m.anio === ui.anio.value);
       paso(ui.resolucion, porAnio, 'resolucion', !!ui.anio.value, 'Elegí tu resolución', 'Primero elegí tu año');
-      llenarSelector(document.getElementById('lista-docentes'), mesas.flatMap(m => [m.docente || '', ...obtenerVocales(m)]), '');
+      llenarSelector(ui.docente, mesas.flatMap(m => [m.docente || '', ...obtenerVocales(m)]), 'Todos los docentes');
     }
 
     function llenarSelector(selector, valores, etiqueta) {
@@ -707,7 +708,7 @@ input {
         ui.busqueda.disabled = false;
       }
       const busqueda = normalizarBusqueda(ui.busqueda.value);
-      const docente = normalizarBusqueda(ui.docente.value);
+      const docente = ui.docente.value;
 
       const resultado = mesas.filter(mesa => {
         return (
@@ -717,7 +718,7 @@ input {
           (!ui.anio.value || mesa.anio === ui.anio.value)
           ) : (
             !docente || [mesa.docente, ...obtenerVocales(mesa)]
-              .some(nombre => normalizarBusqueda(nombre || '').includes(docente))
+              .includes(docente)
           )) &&
           (!ui.turno.value || mesa.turno.trim() === ui.turno.value) &&
           normalizarBusqueda(mesa.materia).includes(busqueda)
